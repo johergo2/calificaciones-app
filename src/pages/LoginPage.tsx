@@ -91,7 +91,7 @@ export default function LoginPage() {
           style={{ width: "60%", marginBottom: 10, padding: 8, borderRadius: 6, borderColor: "#d5d9dfff" }}
         />
 
-        <button onClick={handleLogin} style={{ width: "60%", padding: 8, background: "#007bff", alignItems: "center" }} disabled={loading} >
+        <button onClick={handleLogin} style={{ width: "60%", padding: 8, background: "#007bff", alignItems: "center", color: "white" }} disabled={loading} >
           Ingresar
         </button>
 
