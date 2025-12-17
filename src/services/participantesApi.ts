@@ -1,6 +1,7 @@
 import axios from "axios";
 
-const API_URL = "https://api-usuarios-f1im.onrender.com/api"; // cambia si estás local
+//const API_URL = "http://localhost:8000/api"; // cambia si estás local
+const API_URL = "https://api-usuarios-f1im.onrender.com/api"; // cambia si estás en Render.com
 
 export interface Participante {
   id?: number;

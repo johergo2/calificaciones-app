@@ -55,6 +55,20 @@ export default function MenuPage() {
          </button>
 
          <button
+           onClick={() => navigate("/categorias")}
+           style={botonEstilo}
+         >
+           Crear Categorías
+         </button>
+
+         <button
+           onClick={() => navigate("/asignarcategorias")}
+           style={botonEstilo}
+         >
+           Asociar Categorias/Eventos
+         </button>
+
+         <button
            onClick={() => navigate("/participantes")}
            style={botonEstilo}
          >

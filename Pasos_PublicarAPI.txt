@@ -1,10 +1,12 @@
 
 Construir y publicar API con Render
 
+EL API se publicará en www.render.com
 https://render.com/ => En esta página se inicia sesión con una cuenta de Google o GitHub (lo hice con GitHub)
 
 Usuario: johergo2 (Usuario GitHub)
 Contraseña: johergo919
+
 
 En la carpeta "C:\Desarrollos\API_Usuarios" está el código fuente del API y se conecta con GitHub
 
@@ -27,7 +29,7 @@ Usuario: usuario_api
 Contraseña: qLOEsZzJHzqjNBEQDuwEjGXL2dGU4Aq5
 
 
-
+En el PC local
 -- Activar entorno virtual python:
 En CMD ejecuta: C:\Desarrollos\API_Usuarios\.venv\Scripts\activate
 -- Para ejecutar el archivo "C:\Desarrollos\API_Usuarios\requeriments.txt"
@@ -51,7 +53,7 @@ cd C:\Desarrollos\API_Usuarios\code .
 En el archivo del PC C:\Desarrollos\API_Usuarios\app\database.py modificar DATABASE_URL = "postgresql+asyncpg://usuario_api:qLOEsZzJHzqjNBEQDuwEjGXL2dGU4Aq5@dpg-d4s5b77diees73dkljd0-a.ohio-postgres.render.com/db_api_usuarios"
 con el valor de External Database URL (adicionar +asyncpg)
 
--- Para publicar en GitHub mi proyecto Front
+-- Para publicar en GitHub mi proyecto Front (también se hizo con las API en python)
 Se debe ingresar a CMD a la carpeta C:\Calificaciones
 Ejecutar: git init
 Verificar con: git status (debe listar todos los archivos de la carpeta)

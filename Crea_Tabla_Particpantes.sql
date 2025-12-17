@@ -21,3 +21,9 @@ CREATE OR REPLACE TRIGGER trg_set_fecha_actualizacion
     ON public.participantes
     FOR EACH ROW
     EXECUTE FUNCTION public.set_fecha_actualizacion();
+
+
+    id SERIAL PRIMARY KEY,  
+    categoria VARCHAR(50) NOT NULL, 
+    fecha_creacion timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    fecha_actualizacion timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
