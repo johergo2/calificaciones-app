@@ -67,20 +67,20 @@ export default function CategoriasPage() {
     
     
 
-    // Resetear formulario
-    setFormData({
-      categoria: "",   
-    });
+      // Resetear formulario
+      setFormData({
+        categoria: "",   
+      });
 
-    cargarCategorias();
+      cargarCategorias();
 
-    // Ocultar el mensaje después de 4 segundos
-    setTimeout(() => setMensajeOk(""), 4000);
+      // Ocultar el mensaje después de 4 segundos
+      setTimeout(() => setMensajeOk(""), 4000);
 
-  } catch (error) {
-    console.error("Error al guardar evento: ", error);
-    setErrorCategoria("Error al guardar categoria, revisa los datos.");    
-  }
+   } catch (error) {
+     console.error("Error al guardar evento: ", error);
+     setErrorCategoria("Error al guardar categoria1, revisa los datos.");    
+   }
 
   };
 

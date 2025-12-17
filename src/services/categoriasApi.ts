@@ -17,7 +17,7 @@ export const getCategorias = async (): Promise<Categorias[]> => {
 
 // Crear categoria
 export const crearCategoria = async (evento: Categorias) => {
-  const response = await axios.post(`${API_URL}/categoria`, evento);
+  const response = await axios.post(`${API_URL}/categorias`, evento);
   return response.data;
 };
 
