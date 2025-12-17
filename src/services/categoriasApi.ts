@@ -3,7 +3,7 @@ import axios from "axios";
 const API_URL = "https://api-usuarios-f1im.onrender.com/api"; // cambia si estás local
 
 export interface Categorias {
-  id?: number;
+  id: number;
   categoria: string;
   fecha_creacion?: string;
   fecha_actualizacion?: string;

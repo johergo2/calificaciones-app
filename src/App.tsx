@@ -5,6 +5,7 @@ import EventosPage from "./pages/EventosPage";
 import CategoriasPage from "./pages/CategoriasPage";
 import ParticipanPage from "./pages/ParticipanPage";
 import AsignarCategoriasPage from "./pages/AsignarCategoriasPage";
+import AsignarParticipantesPage from "./pages/AsignarParticipantesCategoriasPage";
 
 function App() {
   return (
@@ -16,6 +17,7 @@ function App() {
         <Route path="/categorias" element={<CategoriasPage />} />
         <Route path="/participantes" element={<ParticipanPage />} />
         <Route path="/asignarcategorias" element={<AsignarCategoriasPage />} />
+        <Route path="/asignarParticipantes" element={<AsignarParticipantesPage />} />
       </Routes>
     </BrowserRouter>
   );

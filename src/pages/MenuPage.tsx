@@ -76,10 +76,24 @@ export default function MenuPage() {
          </button>
 
          <button
+           onClick={() => navigate("/asignarParticipantes")}
+           style={botonEstilo}
+         >
+           Asociar Participantes/Eventos/Categorias "No"
+         </button>
+
+         <button
            onClick={() => navigate("/jurados")}
            style={botonEstilo}
          >
            Crear Integrantes de Jurado
+         </button>
+
+         <button
+           onClick={() => navigate("/jurados")}
+           style={botonEstilo}
+         >
+           Asociar Jurados/Eventos/Categorias "No"
          </button>
         </div>
       </div>

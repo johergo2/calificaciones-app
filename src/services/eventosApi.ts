@@ -7,7 +7,6 @@ export interface Evento {
   nombre: string;
   descripcion?: string;
   fecha_evento: string;
-//  hora_evento: string;
   lugar?: string;
   tipo: string;
   estado: string;
@@ -17,8 +16,14 @@ export interface Evento {
 
 // Obtener todos los eventos
 export const getEventos = async (): Promise<Evento[]> => {
-  const response = await axios.get(`${API_URL}/eventos`);
-  return response.data.eventos;
+  try {
+    const response = await axios.get(`${API_URL}/eventos`);
+    return response.data;    
+  } catch {
+    console.error("Error cargando eventos");
+    return [];
+  }
+
 };
 
 // Crear evento

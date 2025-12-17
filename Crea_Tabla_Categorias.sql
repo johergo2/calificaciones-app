@@ -2,7 +2,7 @@ select * from usuarios
 
 select * from eventos
 
-select * from participantes where tip
+select * from participantes
 
 
 INSERT INTO usuarios (nombre, email, contrasena)
@@ -31,6 +31,10 @@ select * from eventos
 delete from eventos where id in (16,17)
 
 
+INSERT INTO categorias (categoria)
+VALUES ('Master')
+
+select * from categorias	
 
 CREATE TABLE public.categorias
 (
@@ -48,3 +52,28 @@ CREATE OR REPLACE TRIGGER trg_set_fecha_actualizacion_part
     ON public.participantes
     FOR EACH ROW
     EXECUTE FUNCTION public.set_fecha_actualizacion();
+
+	
+select * from eventos_categorias
+
+INSERT INTO eventos_categorias (evento_id, categoria_id)
+VALUES ('19','3')
+
+UPDATE eventos_categorias
+        SET categoria_id = :categoria_id
+            fecha_actualizacion = CURRENT_TIMESTAMP
+        WHERE id = :evid
+
+
+SELECT
+    c.id,
+    c.categoria
+FROM eventos_categorias ec
+JOIN categorias c ON c.id = ec.categoria_id
+WHERE ec.evento_id = 18
+ORDER BY c.categoria;
+
+select * from participantes_categorias_eventos
+
+INSERT INTO participantes_categorias_eventos (cedula, evento_id, categoria_id)
+VALUES ('16780919','19','2')
