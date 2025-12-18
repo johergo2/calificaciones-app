@@ -1,11 +1,14 @@
 import { useEffect, useState } from "react";
 import type { Categorias } from "../services/categoriasApi";
+
 import {
   getCategorias,
   crearCategoria,
   actualizarCategoria,
   eliminarCategoria,
 } from "../services/categoriasApi";
+
+import type { CategoriaForm } from "../services/categoriasApi";
 import { useNavigate } from "react-router-dom";
 
 
@@ -13,7 +16,7 @@ export default function CategoriasPage() {
   const [categorias, setCategorias] = useState<Categorias[]>([]);
   const [editando, setEditando] = useState<Categorias | null>(null);
 
-  const [formData, setFormData] = useState<Categorias>({
+  const [formData, setFormData] = useState<CategoriaForm>({
     categoria: "",    
   });
 
@@ -51,7 +54,7 @@ export default function CategoriasPage() {
     setErrorCategoria(""); // limpiar error si hay cedula
 
     const payload = {
-      id: formData.id,
+      //id: formData.id,
       categoria: formData.categoria.trim(),      
     };
 

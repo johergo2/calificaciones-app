@@ -18,7 +18,7 @@ export interface Evento {
 export const getEventos = async (): Promise<Evento[]> => {
   try {
     const response = await axios.get(`${API_URL}/eventos`);
-    return response.data;    
+    return response.data.eventos;    
   } catch {
     console.error("Error cargando eventos");
     return [];

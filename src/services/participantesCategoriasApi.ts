@@ -27,7 +27,7 @@ export const getParticipantesCategoriasEventos = async (
   cedula?: string
 ): Promise<ParticipanteCategoriaEvento[]> => {
 
-  const params: any = {};
+  const params: Record<string, any> = {};
   if (eventoId) params.evento_id = eventoId;
   if (cedula) params.cedula = cedula;
 
@@ -36,7 +36,20 @@ export const getParticipantesCategoriasEventos = async (
     { params }
   );
 
-  return response.data.data;
+  // 🔒 Normalización de respuesta (CLAVE)
+  if (Array.isArray(response.data)) {
+    return response.data;
+  }
+
+  if (Array.isArray(response.data.data)) {
+    return response.data.data;
+  }
+
+  if (Array.isArray(response.data.registros)) {
+    return response.data.registros;
+  }
+
+  return [];
 };
 
 /* =====================================================
@@ -64,15 +77,29 @@ export const asignarParticipanteCategorias = async (
    3. Obtener categorías de un participante en un evento
 ===================================================== */
 
+export interface CategoriaAsignada {
+  id: number;
+  categoria: string;
+}
+
 export const getCategoriasPorParticipanteEvento = async (
   cedula: string,
   eventoId: number
-) => {
+): Promise<CategoriaAsignada[]> => {
   const response = await axios.get(
     `${API_URL}/participantes/${cedula}/eventos/${eventoId}/categorias`
   );
 
-  return response.data.categorias;
+  // Normalizar respuesta
+  if (Array.isArray(response.data)) {
+    return response.data;
+  }
+
+  if (Array.isArray(response.data.categorias)) {
+    return response.data.categorias;
+  }
+
+  return [];
 };
 
 /* =====================================================

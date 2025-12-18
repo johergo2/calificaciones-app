@@ -74,7 +74,9 @@ export default function AsignarParticipantesCategoriasPage() {
   ================================ */
   useEffect(() => {
     cargarDatos();
-  }, []);
+    //cargarTabla();
+    cargarTabla(eventoFiltroId === "" ? undefined : eventoFiltroId);
+  }, [eventoFiltroId]);
 
   const cargarDatos = async () => {
     setParticipantes(await getParticipantes());
@@ -138,6 +140,7 @@ export default function AsignarParticipantesCategoriasPage() {
     try {
       setLoadingTabla(true);
       const data = await getParticipantesCategoriasEventos(eventoId);
+      console.log("TABLA BACKEND →", data);
       setTabla(data);
     } finally {
       setLoadingTabla(false);
@@ -169,7 +172,15 @@ export default function AsignarParticipantesCategoriasPage() {
       </h2>
 
       <div style={{ display: "flex", justifyContent: "flex-end" }}>
-        <button onClick={() => navigate("/menu")}>⬅ Volver</button>
+        <button onClick={() => navigate("/menu")}
+                  style={{
+                    background: "#007bff",
+                    color: "white",
+                    fontSize: "0.6rem",
+                    //height: "15px"
+                  }}                    
+        >          
+          ⬅ Volver</button>
       </div>
 
       {/* ===============================
@@ -188,7 +199,14 @@ export default function AsignarParticipantesCategoriasPage() {
 
         {/* Participante */}
         <label>Participante:</label>
-        <select value={cedula} onChange={e => setCedula(e.target.value)}>
+        <select value={cedula} onChange={e => setCedula(e.target.value)}
+                  style={{                                        
+                    fontSize: "0.9rem",
+                    //height: "15px"
+                    width: "430px",
+                    margin: "15px"
+                  }}          
+        >
           <option value="">-- Seleccione --</option>
           {participantes.map(p => (
             <option key={p.cedula} value={p.cedula}>
@@ -198,10 +216,16 @@ export default function AsignarParticipantesCategoriasPage() {
         </select>
 
         {/* Evento */}
-        <label>Evento:</label>
+        <label style={{marginLeft: "70px"}}>Evento:</label>
         <select
           value={eventoId}
           onChange={e => setEventoId(e.target.value ? Number(e.target.value) : "")}
+                  style={{                                        
+                    fontSize: "0.9rem",
+                    //height: "15px"
+                    width: "430px",
+                    margin: "15px"
+                  }}          
         >
           <option value="">-- Seleccione --</option>
           {eventos.map(e => (
@@ -225,8 +249,18 @@ export default function AsignarParticipantesCategoriasPage() {
             </div>
           ))}
         </div>
-
-        <button onClick={guardarAsignacion}>Guardar</button>
+        <div style={{textAlign: "center", marginTop: 20}}>        
+          <button onClick={guardarAsignacion}
+              style={{ 
+                  padding: "10px 30px",
+                  fontWeight: "bold",
+                  background: "#007bff",
+                  color: "white",
+                  border: "none",
+                  borderRadius: 8,
+              }}       
+          >Guardar</button>
+        </div>
       </div>
 
       {/* ===============================
@@ -249,7 +283,23 @@ export default function AsignarParticipantesCategoriasPage() {
         ))}
       </select>
 
-      <button onClick={() => cargarTabla(eventoFiltroId || undefined)}>
+      <button onClick={() => {
+        if (eventoFiltroId === ""){
+          cargarTabla();
+        } else{
+          cargarTabla(eventoFiltroId);
+        }
+      }}
+            style={{ 
+                padding: "7px 30px",
+                fontWeight: "bold",
+                background: "#007bff",
+                color: "white",
+                border: "none",
+                margin: "20px",
+                borderRadius: 8,
+            }}        
+      >
         Consultar
       </button>
 
