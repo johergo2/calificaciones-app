@@ -201,7 +201,7 @@ export default function AsignarCategoriasPage() {
                     fontSize: "0.6rem",
                     //height: "15px"
                   }}        
-        >⬅ Volver
+        >⬅ Volver al Menú
         </button>
       </div>
 

@@ -242,7 +242,7 @@ const botonCerrarStyle: React.CSSProperties = {
                     //height: "15px"
                   }}                    
         >          
-          ⬅ Volver</button>
+          ⬅ Volver al Menú</button>
       </div>
 
       {/* ===============================
