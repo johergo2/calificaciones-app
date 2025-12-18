@@ -60,7 +60,10 @@ export default function AsignarParticipantesCategoriasPage() {
   const [eventoId, setEventoId] = useState<number | "">("");
   const [categoriasSeleccionadas, setCategoriasSeleccionadas] = useState<number[]>([]);
 
-  const [mensajeOk, setMensajeOk] = useState("");
+//  const [mensajeOk, setMensajeOk] = useState("");
+const [mostrarPopup, setMostrarPopup] = useState(false);
+const [popupMensaje, setPopupMensaje] = useState("");
+
 
   /* ===============================
      Tabla
@@ -117,20 +120,29 @@ export default function AsignarParticipantesCategoriasPage() {
   ================================ */
   const guardarAsignacion = async () => {
     if (!cedula || !eventoId) {
-      alert("Debe seleccionar participante y evento");
+      //alert("Debe seleccionar participante y evento");
+      setPopupMensaje("Debe seleccionar participante y evento");
+      setMostrarPopup(true);
       return;
     }
 
-    await asignarParticipanteCategorias({
-      cedula,
-      evento_id: eventoId as number,
-      categorias: categoriasSeleccionadas,
-    });
+    try {
+      await asignarParticipanteCategorias({
+        cedula,
+        evento_id: eventoId as number,
+        categorias: categoriasSeleccionadas,
+      });
 
-    setMensajeOk("✔️ Categorías asignadas correctamente");
-    cargarTabla(eventoFiltroId || undefined);
+      setPopupMensaje("✔️ Categorías asignadas correctamente");
+      setMostrarPopup(true);
 
-    setTimeout(() => setMensajeOk(""), 4000);
+      cargarTabla(eventoFiltroId || undefined);
+
+    } catch (error) {
+      setPopupMensaje("❌ Error al asignar categorías");
+      setMostrarPopup(true);
+    }
+    //setTimeout(() => setMensajeOk(""), 4000);
   };
 
   /* ===============================
@@ -162,11 +174,61 @@ export default function AsignarParticipantesCategoriasPage() {
     cargarCategoriasAsignadas();
   };
 
+const overlayStyle: React.CSSProperties = {
+  position: "fixed",
+  top: 0,
+  left: 0,
+  width: "100vw",
+  height: "100vh",
+  background: "rgba(0,0,0,0.4)",
+  display: "flex",
+  alignItems: "center",
+  justifyContent: "center",
+  zIndex: 1000,
+};
+
+const modalStyle: React.CSSProperties = {
+  background: "#fff",
+  padding: "25px 40px",
+  borderRadius: 10,
+  textAlign: "center",
+  minWidth: 300,
+  boxShadow: "0 5px 15px rgba(0,0,0,0.3)",
+};
+
+const botonCerrarStyle: React.CSSProperties = {
+  marginTop: 15,
+  padding: "8px 20px",
+  background: "#007bff",
+  color: "#fff",
+  border: "none",
+  borderRadius: 6,
+  cursor: "pointer",
+};
+
   /* ===============================
      Render
   ================================ */
+
+
+
   return (
     <div style={{ width: "90vw", padding: 20 }}>
+
+      {mostrarPopup && (
+        <div style={overlayStyle}>
+          <div style={modalStyle}>
+            <p>{popupMensaje}</p>
+            <button
+              onClick={() => setMostrarPopup(false)}
+              style={botonCerrarStyle}
+            >
+              Aceptar
+            </button>
+          </div>
+        </div>
+      )}
+
       <h2 style={{ textAlign: "center" }}>
         ASIGNAR PARTICIPANTES A EVENTOS Y CATEGORÍAS
       </h2>
@@ -186,6 +248,7 @@ export default function AsignarParticipantesCategoriasPage() {
       {/* ===============================
          FORMULARIO
       ================================ */}
+      
       <div
         style={{
           marginTop: 20,
@@ -194,9 +257,7 @@ export default function AsignarParticipantesCategoriasPage() {
           borderRadius: 12,
           background: "#f9f9f9",
         }}
-      >
-        {mensajeOk && <div style={{ color: "green" }}>{mensajeOk}</div>}
-
+      >        
         {/* Participante */}
         <label>Participante:</label>
         <select value={cedula} onChange={e => setCedula(e.target.value)}
@@ -261,7 +322,7 @@ export default function AsignarParticipantesCategoriasPage() {
               }}       
           >Guardar</button>
         </div>
-      </div>
+      </div>         {/* FIN FORMULARIO */}
 
       {/* ===============================
          TABLA
@@ -341,6 +402,6 @@ export default function AsignarParticipantesCategoriasPage() {
           </tbody>
         </table>
       )}
-    </div>
+    </div> 
   );
 }
