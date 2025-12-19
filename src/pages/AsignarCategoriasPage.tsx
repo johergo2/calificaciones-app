@@ -242,18 +242,38 @@ export default function AsignarCategoriasPage() {
         </div>
 
         {/* Categorías */}
-        <div style={{ marginTop: 20 }}>
+        <div style={{ marginTop: 5 }}>
           <strong>Categorías:</strong>
-          {categorias.map(c => (
-            <div key={c.id}>
-              <input
-                type="checkbox"
-                checked={categoriasSeleccionadas.includes(c.id)}
-                onChange={() => toggleCategoria(c.id)}
-              />{" "}
-              {c.categoria}
-            </div>
+          
+          <div
+            style={{ 
+                display: "grid",
+                gridTemplateColumns: "repeat(3, 1fr)",
+                gap: "8px 20 px",
+                marginTop: 10,
+            }}  
+          >
+          
+            {categorias.map(c => (
+              <label
+                key={c.id}
+                  style={{ 
+                      display: "flex",
+                      alignItems: "center",
+                      fontSize: "0.9rem",
+                      cursor: "pointer",
+                  }}              
+              >
+                <input
+                  type="checkbox"
+                  checked={categoriasSeleccionadas.includes(c.id)}
+                  onChange={() => toggleCategoria(c.id)} 
+                  style={{ marginRight: 6 }}
+                />
+                {c.categoria}              
+              </label>
           ))}
+          </div>
         </div>
 
         <div style={{ marginTop: 20, textAlign: "center" }}>

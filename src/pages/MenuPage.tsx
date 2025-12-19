@@ -79,7 +79,7 @@ export default function MenuPage() {
            onClick={() => navigate("/asignarParticipantes")}
            style={botonEstilo}
          >
-           Asociar Participantes/Eventos/Categorias "No"
+           Asociar Participantes/Eventos/Categorias
          </button>
 
          <button
