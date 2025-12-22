@@ -27,7 +27,7 @@ export const crearCalificacion = async (data: {
                                           evento_id: number;
                                           categoria_id: number;
                                           puntaje: number;
-}) => {
+                                        }) => {
   const response = await axios.post(`${API_URL}/calificaciones`, data);
   return response.data;
 };
