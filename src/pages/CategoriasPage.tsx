@@ -20,8 +20,11 @@ export default function CategoriasPage() {
     categoria: "",    
   });
 
-  const [errorCategoria, setErrorCategoria] = useState<string>("");  
-  const [mensajeOk, setMensajeOk] = useState<string>("")
+  const [errorCategoria, setErrorCategoria] = useState<string>("");
+
+  //const [mensajeOk, setMensajeOk] = useState<string>("")
+  const [mostrarPopup, setMostrarPopup] = useState(false);
+  const [popupMensaje, setPopupMensaje] = useState("");
 
   const navigate = useNavigate();
 
@@ -61,11 +64,15 @@ export default function CategoriasPage() {
     try {
       if (editando) {
         await actualizarCategoria(editando.id!, payload);
-        setMensajeOk("✔️ Categoria actualizada correctamente");
+        //setMensajeOk("✔️ Categoria actualizada correctamente");
+        setPopupMensaje("✔️ Evento actualizado correctamente");
+        setMostrarPopup(true); 
         setEditando(null);
       } else {
         await crearCategoria(payload);
-        setMensajeOk("✔️ Categoria creada correctamente");
+        //setMensajeOk("✔️ Categoria creada correctamente");
+        setPopupMensaje("✔️ Evento actualizado correctamente");
+        setMostrarPopup(true); 
       }
     
     
@@ -78,7 +85,7 @@ export default function CategoriasPage() {
       cargarCategorias();
 
       // Ocultar el mensaje después de 4 segundos
-      setTimeout(() => setMensajeOk(""), 4000);
+      //setTimeout(() => setMensajeOk(""), 4000);
 
    } catch (error) {
      console.error("Error al guardar evento: ", error);
@@ -102,9 +109,52 @@ export default function CategoriasPage() {
     }
   };
 
+  //Estilos para popup
+const overlayStyle: React.CSSProperties = {
+  position: "fixed",
+  top: 0,
+  left: 0,
+  width: "100vw",
+  height: "100vh",
+  background: "rgba(0,0,0,0.4)",
+  display: "flex",
+  alignItems: "center",
+  justifyContent: "center",
+  zIndex: 1000,
+};
+
+const modalStyle: React.CSSProperties = {
+  background: "#fff",
+  padding: "25px 40px",
+  borderRadius: 10,
+  textAlign: "center",
+  minWidth: 300,
+  boxShadow: "0 5px 15px rgba(0,0,0,0.3)",
+};
+
+const botonCerrarStyle: React.CSSProperties = {
+  marginTop: 15,
+  padding: "8px 20px",
+  background: "#007bff",
+  color: "#fff",
+  border: "none",
+  borderRadius: 6,
+  cursor: "pointer",
+}; 
+
+// Estilos para tabla inferior
+  const thStyle: React.CSSProperties = {
+  padding: "12px 14px",
+  fontSize: "0.85rem",
+  fontWeight: 600,
+  textTransform: "uppercase",
+  borderBottom: "2px solid #1005a7ff",
+  borderRight: "1px solid #E5E7EB",
+};
+
   return (
-    <div style={{ width: "90vw", margin: 0, padding: "10px", boxSizing: "border-box" }}>
-      <h2 style={{ textAlign: "center", marginBottom: 2 }}>GESTIONAR CATEGORÍAS</h2>
+    <div style={{ width: "90vw", padding: 20, background: "#f1f5f9", minHeight: "100vh" }}>
+      <h2 style={{ textAlign: "center", color: "#1E40AF", fontWeight: 700, letterSpacing: "0.5PX" }}>GESTIONAR CATEGORÍAS</h2>
 
       {/* Botón regresar al menú */}
       <div style={{ width: "100%", display: "flex", justifyContent: "flex-end", marginBottom: "10px" }}>
@@ -126,20 +176,29 @@ export default function CategoriasPage() {
         </button>
       </div>
 
-
+      {mostrarPopup && (
+        <div style={overlayStyle}>
+          <div style={modalStyle}>
+            <p>{popupMensaje}</p>
+            <button
+              onClick={() => setMostrarPopup(false)}
+              style={botonCerrarStyle}
+            >
+              Aceptar
+            </button>
+          </div>
+        </div>
+      )}
 
       {/* Formulario */}
       <div
         style={{
-          padding: "15px",
-          borderRadius: "14px",
-          background: "#f0f0f0",
-          //boxShadow: "0px 4px 12px rgba(0,0,0,0.1)",
-          borderWidth: "1px",
-          borderStyle: "solid",
-          borderColor: "#add8e6",
-          marginBottom: "5px",
-          width: "100%",
+          marginTop: 20,
+          padding: 20,
+          border: "1px solid #076df3ff",
+          borderRadius: 16,
+          background: "#FFFFFF",
+          boxShadow: "0 10px 25px rgba(0,0,0,0.05)"
         }}
       >
         <h3 style={{ marginBottom: "10px", textAlign: "center", color: "#444", fontSize: "1.2rem" }}>
@@ -172,18 +231,6 @@ export default function CategoriasPage() {
           )}          
         </div>
 
-        {/* Contenedor de Fecha y Tipo, alineados horizontalmente */}
-        <div
-          style={{
-            display: "flex",
-            flexDirection: "row",
-            gap: "10px",              // espacio entre los campos                     
-            marginBottom: "10px",
-            alignItems: "flex-start", // alinear la parte superior
-          }}
-        >
-        </div>
-
         <div style={{ display: "flex", justifyContent: "center", width: "100%" }}>
           <button
             onClick={guardarCategoria}
@@ -206,40 +253,25 @@ export default function CategoriasPage() {
         </div>
       </div>
 
-      {mensajeOk && (
-        <div
-          style={{
-            background: "#d4edda",
-            color: "#155724",
-            padding: "10px",
-            borderRadius: "10px",
-            marginBottom: "10px",
-            textAlign: "center",
-            border: "1px solid #c3e6cb",
-            fontWeight: "bold",
-          }}
-        >
-          {mensajeOk}
-        </div>
-      )}
-
       {/* Tabla de eventos */}
       <table
+        width="100%" 
         style={{
-          width: "100%",
-          borderCollapse: "collapse",
-          marginTop: 20,
-          background: "white",
-          borderRadius: 10,
-          overflow: "hidden",
-          border: "1px solid #141313ff", // borde externo
+            marginTop: 20,            
+            borderCollapse: "collapse",
+            background: "#FFFFFF",
+            borderRadius: 12,
+            overflow: "hidden",
+            boxShadow: "0 6px 18px rgba(0,0,0,0.08)",
+            tableLayout: "fixed",
+            textOverflow: "ellipsis", 
         }}
       >
         <thead style={{ background: "#f0f0f0" }}>
-          <tr>
-            <th style={{ border: "1px solid #141313ff", padding: 8 }}>ID</th>
-            <th style={{ border: "1px solid #141313ff", padding: 8 }}>Categoria</th>
-            <th style={{ border: "1px solid #141313ff", padding: 8 }}>Acciones</th>
+          <tr style={{ background: "linear-gradient(90deg, #007bff, #2563EB)", color: "#FFFFFF", textAlign: "left"}}>
+            <th style={{ ...thStyle, width: "10%"}}>ID</th>
+            <th style={{ ...thStyle, width: "75%"}}>Categoria</th>
+            <th style={{ ...thStyle, width: "15%"}}>Acciones</th>
           </tr>
         </thead>
         <tbody>
@@ -256,7 +288,7 @@ export default function CategoriasPage() {
                     border: "1px solid #59636eff",
                     boxShadow: "0 2px 4px #4f555cff, 0 6px 10px rgba(0,0,0,0.2)",
                     color: "blue" }}                
-                >Editar</button>
+                >📝</button>
                 <button
                   onClick={() => eliminar(e.id!)}
                   style={{ 
@@ -265,9 +297,10 @@ export default function CategoriasPage() {
                     background: "#bbc2caff", 
                     border: "1px solid #59636eff",
                     boxShadow: "0 2px 4px #4f555cff, 0 6px 10px rgba(0,0,0,0.2)",
-                    color: "red" }}
+                    color: "red" 
+                  }}
                 >
-                  Eliminar
+                  🗑️
                 </button>
               </td>
             </tr>

@@ -26,7 +26,10 @@ export default function EventosPage() {
   const [errorDescripcion, setErrorDescripcion] = useState<string>("");
   const [errorNombre, setErrorNombre] = useState<string>("");
   const [errorLugar, setErrorLugar] = useState<string>("");
-  const [mensajeOk, setMensajeOk] = useState<string>("")
+
+  //const [mensajeOk, setMensajeOk] = useState<string>("")
+  const [mostrarPopup, setMostrarPopup] = useState(false);
+  const [popupMensaje, setPopupMensaje] = useState("");
 
   const navigate = useNavigate();
 
@@ -85,11 +88,15 @@ export default function EventosPage() {
     try {
       if (editando) {
         await actualizarEvento(editando.id!, payload);
-        setMensajeOk("✔️ Evento actualizado correctamente");
+        //setMensajeOk("✔️ Evento actualizado correctamente");
+        setPopupMensaje("✔️ Evento actualizado correctamente");
+        setMostrarPopup(true);        
         setEditando(null);
       } else {
         await crearEvento(payload);
-        setMensajeOk("✔️ Evento creado correctamente");
+        //setMensajeOk("✔️ Evento creado correctamente");
+        setPopupMensaje("✔️ Evento creado correctamente");
+        setMostrarPopup(true); 
       }
     
     
@@ -107,7 +114,7 @@ export default function EventosPage() {
     cargarEventos();
 
     // Ocultar el mensaje después de 4 segundos
-    setTimeout(() => setMensajeOk(""), 4000);
+    //setTimeout(() => setMensajeOk(""), 4000);
 
   } catch (error) {
     console.error("Error al guardar evento: ", error);
@@ -132,12 +139,69 @@ export default function EventosPage() {
     }
   };
 
+//Estilos para popup
+const overlayStyle: React.CSSProperties = {
+  position: "fixed",
+  top: 0,
+  left: 0,
+  width: "100vw",
+  height: "100vh",
+  background: "rgba(0,0,0,0.4)",
+  display: "flex",
+  alignItems: "center",
+  justifyContent: "center",
+  zIndex: 1000,
+};
+
+const modalStyle: React.CSSProperties = {
+  background: "#fff",
+  padding: "25px 40px",
+  borderRadius: 10,
+  textAlign: "center",
+  minWidth: 300,
+  boxShadow: "0 5px 15px rgba(0,0,0,0.3)",
+};
+
+const botonCerrarStyle: React.CSSProperties = {
+  marginTop: 15,
+  padding: "8px 20px",
+  background: "#007bff",
+  color: "#fff",
+  border: "none",
+  borderRadius: 6,
+  cursor: "pointer",
+};  
+
+// Estilos para tabla inferior
+  const thStyle: React.CSSProperties = {
+  padding: "12px 14px",
+  fontSize: "0.85rem",
+  fontWeight: 600,
+  textTransform: "uppercase",
+  borderBottom: "2px solid #1005a7ff",
+  borderRight: "1px solid #E5E7EB",
+};
+
+const tdStyle: React.CSSProperties = {
+  padding: "10px 14px",
+  fontSize: "0.9rem",
+  color: "#374151",
+  borderRight: "1px solid #9db9f1ff",
+  maxWidth: "100%",          // 👈 limita el ancho
+  //whiteSpace: "nowrap",      // 👈 no permite salto de línea
+  overflow: "hidden",        // 👈 oculta el exceso
+  textOverflow: "ellipsis",  // 👈 muestra "..."  
+};
+
+  /* ===============================
+     Render
+  ================================ */
   return (
-    <div style={{ width: "90vw", margin: 0, padding: "10px", boxSizing: "border-box" }}>
-      <h2 style={{ textAlign: "center", marginBottom: 2 }}>GESTIÓN DE EVENTOS</h2>
+    <div style={{ width: "90vw", padding: 20, background: "#f1f5f9", minHeight: "100vh" }}>
+      <h2 style={{ textAlign: "center", color: "#1E40AF", fontWeight: 700, letterSpacing: "0.5PX" }}>GESTIÓN DE EVENTOS</h2>
 
       {/* Botón regresar al menú */}
-      <div style={{ width: "100%", display: "flex", justifyContent: "flex-end", marginBottom: "10px" }}>
+      <div style={{ display: "flex", justifyContent: "flex-end" }}>
         <button
           onClick={() => navigate("/menu")}
           style={{
@@ -156,38 +220,32 @@ export default function EventosPage() {
         </button>
       </div>
 
-      {mensajeOk && (
-        <div
-          style={{
-            background: "#d4edda",
-            color: "#155724",
-            padding: "10px",
-            borderRadius: "10px",
-            marginBottom: "10px",
-            textAlign: "center",
-            border: "1px solid #c3e6cb",
-            fontWeight: "bold",
-          }}
-        >
-          {mensajeOk}
+      {mostrarPopup && (
+        <div style={overlayStyle}>
+          <div style={modalStyle}>
+            <p>{popupMensaje}</p>
+            <button
+              onClick={() => setMostrarPopup(false)}
+              style={botonCerrarStyle}
+            >
+              Aceptar
+            </button>
+          </div>
         </div>
       )}
 
       {/* Formulario */}
       <div
         style={{
-          padding: "15px",
-          borderRadius: "14px",
-          background: "#f0f0f0",
-          //boxShadow: "0px 4px 12px rgba(0,0,0,0.1)",
-          borderWidth: "1px",
-          borderStyle: "solid",
-          borderColor: "#add8e6",
-          marginBottom: "5px",
-          width: "100%",
+          marginTop: 20,
+          padding: 20,
+          border: "1px solid #076df3ff",
+          borderRadius: 16,
+          background: "#FFFFFF",
+          boxShadow: "0 10px 25px rgba(0,0,0,0.05)"
         }}
       >
-        <h3 style={{ marginBottom: "10px", textAlign: "center", color: "#444", fontSize: "1.2rem" }}>
+        <h3 style={{ marginBottom: "3px", textAlign: "center", color: "#444", fontSize: "1.2rem" }}>
           {editando ? "✏️ Editar Evento" : "📝 Crear Evento"}
         </h3>
 
@@ -386,38 +444,56 @@ export default function EventosPage() {
 
       {/* Tabla de eventos */}
       <table
+        width="100%" 
         style={{
-          width: "100%",
-          borderCollapse: "collapse",
-          marginTop: 20,
-          background: "white",
-          borderRadius: 10,
-          overflow: "hidden",
+            marginTop: 20,            
+            borderCollapse: "collapse",
+            background: "#FFFFFF",
+            borderRadius: 12,
+            overflow: "hidden",
+            boxShadow: "0 6px 18px rgba(0,0,0,0.08)",
+            tableLayout: "fixed",
+            textOverflow: "ellipsis",            
         }}
       >
         <thead style={{ background: "#f0f0f0" }}>
-          <tr>
-            <th>ID</th>
-            <th>Nombre</th>
-            <th>Lugar</th>
-            <th>Estado</th>
+          <tr style={{ background: "linear-gradient(90deg, #007bff, #2563EB)", color: "#FFFFFF", textAlign: "left"}}>
+            <th style={{ ...thStyle, width: "5%"}}>ID</th>
+            <th style={{ ...thStyle, width: "43%"}}>Nombre</th>
+            <th style={{ ...thStyle, width: "35%"}}>Lugar</th>
+            <th style={{ ...thStyle, width: "5%"}}>Estado</th>
+            <th style={{ ...thStyle, width: "12%"}}>Acción</th>
             <th></th>
           </tr>
         </thead>
         <tbody>
           {eventos.map((e) => (
-            <tr key={e.id} style={{ borderBottom: "1px solid #ddd" }}>
-              <td>{e.id}</td>
-              <td>{e.nombre}</td>
-              <td>{e.lugar}</td>
-              <td>{e.estado}</td>
-              <td>
-                <button onClick={() => editar(e)}>Editar</button>
+            <tr key={e.id} style={{ background: e.id! % 2 === 0 ? "#F9FAFB" : "#FFFFFF", borderBottom: "1px solid #E5E7EB" }}>
+              <td style={tdStyle}>{e.id}</td>
+              <td style={tdStyle}>{e.nombre}</td>
+              <td style={tdStyle}>{e.lugar}</td>
+              <td style={tdStyle}>{e.estado}</td>
+              <td>              
+                <button 
+                  style={{background: "#bbc2caff", 
+                          border: "1px solid #59636eff", 
+                          color: "#100dccff", 
+                          borderRadius: 6, 
+                          margin: "6px",
+                          cursor: "pointer", 
+                          padding: "3px 15px",}}
+                  onClick={() => editar(e)}>📝</button>
                 <button
-                  onClick={() => eliminar(e.id!)}
-                  style={{ marginLeft: 10, color: "red" }}
+                  style={{background: "#bbc2caff", 
+                          border: "1px solid #59636eff", 
+                          color: "#100dccff", 
+                          borderRadius: 6, 
+                          margin: "6px",
+                          cursor: "pointer", 
+                          padding: "3px 15px",}}                
+                  onClick={() => eliminar(e.id!)}                  
                 >
-                  Eliminar
+                  🗑️
                 </button>
               </td>
             </tr>

@@ -33,7 +33,11 @@ export default function AsignarCategoriasPage() {
   const [categorias, setCategorias] = useState<Categoria[]>([]);
   const [eventoId, setEventoId] = useState<number | "">("");
   const [categoriasSeleccionadas, setCategoriasSeleccionadas] = useState<number[]>([]);
-  const [mensajeOk, setMensajeOk] = useState("");
+
+  //Mostrar popup al guardar
+  //const [mensajeOk, setMensajeOk] = useState("");
+  const [mostrarPopup, setMostrarPopup] = useState(false);
+  const [popupMensaje, setPopupMensaje] = useState("");
 
   /* Tabla inferior */
   const [tablaEventoCategorias, setTablaEventoCategorias] = useState<EventoCategoria[]>([]);
@@ -113,7 +117,9 @@ export default function AsignarCategoriasPage() {
 ================================ */
   const guardarAsignacion = async () => {
     if (!eventoId) {
-      alert("Debe seleccionar un evento");
+      //alert("Debe seleccionar un evento");
+      setPopupMensaje("Debe seleccionar participante y evento");
+      setMostrarPopup(true);      
       return;
     }
 
@@ -126,12 +132,17 @@ export default function AsignarCategoriasPage() {
 
       if (!res.ok) throw new Error();
 
-      setMensajeOk("✔️ Categorías asignadas correctamente");
+      //setMensajeOk("✔️ Categorías asignadas correctamente");
+      setPopupMensaje("✔️ Categorías asignadas correctamente");
+      setMostrarPopup(true);      
+
       cargarTablaEventoCategorias(eventoFiltroId || undefined);
 
-      setTimeout(() => setMensajeOk(""), 4000);
+      //setTimeout(() => setMensajeOk(""), 4000);
     } catch {
-      alert("Error guardando categorías");
+      //alert("Error guardando categorías");
+      setPopupMensaje("❌ Error al asignar categorías");
+      setMostrarPopup(true);
     }
   };
 
@@ -186,12 +197,84 @@ export default function AsignarCategoriasPage() {
     }
   };
 
+  const selectStyle: React.CSSProperties = {
+  fontSize: "0.9rem",
+  padding: "4px 12px",
+  borderRadius: 8,
+  border: "1px solid #CBD5E1",
+  background: "#FFFFFF",
+  marginLeft: "20px"
+};
+
+const thStyle: React.CSSProperties = {
+  padding: "12px 14px",
+  fontSize: "0.85rem",
+  fontWeight: 600,
+  textTransform: "uppercase",
+  borderBottom: "2px solid #1005a7ff",
+  borderRight: "1px solid #E5E7EB",
+};
+
+const tdStyle: React.CSSProperties = {
+  padding: "10px 14px",
+  fontSize: "0.9rem",
+  color: "#374151",
+  borderRight: "1px solid #9db9f1ff",
+};
+
+const overlayStyle: React.CSSProperties = {
+  position: "fixed",
+  top: 0,
+  left: 0,
+  width: "100vw",
+  height: "100vh",
+  background: "rgba(0,0,0,0.4)",
+  display: "flex",
+  alignItems: "center",
+  justifyContent: "center",
+  zIndex: 1000,
+};
+
+const modalStyle: React.CSSProperties = {
+  background: "#fff",
+  padding: "25px 40px",
+  borderRadius: 10,
+  textAlign: "center",
+  minWidth: 300,
+  boxShadow: "0 5px 15px rgba(0,0,0,0.3)",
+};
+
+const botonCerrarStyle: React.CSSProperties = {
+  marginTop: 15,
+  padding: "8px 20px",
+  background: "#007bff",
+  color: "#fff",
+  border: "none",
+  borderRadius: 6,
+  cursor: "pointer",
+};
+
   /* ===============================
      Render
 ================================ */
   return (
-    <div style={{ width: "90vw", padding: 20 }}>
-      <h2 style={{ textAlign: "center" }}>ASIGNAR CATEGORÍAS A EVENTOS</h2>
+    <div style={{ width: "90vw", padding: 20, background: "#f1f5f9", minHeight: "100vh" }}>
+
+      {mostrarPopup && (
+        <div style={overlayStyle}>
+          <div style={modalStyle}>
+            <p>{popupMensaje}</p>
+            <button
+              onClick={() => setMostrarPopup(false)}
+              style={botonCerrarStyle}
+            >
+              Aceptar
+            </button>
+          </div>
+        </div>
+      )}
+
+      <h2 style={{ textAlign: "center", color: "#1E40AF", fontWeight: 700, letterSpacing: "0.5PX" }}>ASIGNAR CATEGORÍAS A EVENTOS</h2>
 
       <div style={{ display: "flex", justifyContent: "flex-end" }}>
        <button onClick={() => navigate("/menu")}
@@ -199,7 +282,10 @@ export default function AsignarCategoriasPage() {
                     background: "#007bff",
                     color: "white",
                     fontSize: "0.6rem",
-                    //height: "15px"
+                    //height: "15px",
+                    cursor: "pointer",
+                    boxShadow: "0 4px 12px rgba(37,99,235,0.35)",
+                    transition: "all 0.2s",
                   }}        
         >⬅ Volver al Menú
         </button>
@@ -210,19 +296,16 @@ export default function AsignarCategoriasPage() {
       ================================================== */}
       <div
         style={{
-          border: "1px solid #ccc",
-          borderRadius: 10,
+          border: "1px solid #076df3ff",
+          borderRadius: 16,
           padding: 20,
           marginTop: 20,
-          background: "#f9f9f9",
+          background: "#ffffff",
+          boxShadow: "0 10px 25px rgba(0,0,0,0.05)"
         }}
       >
 
-        {mensajeOk && (
-          <div style={{ background: "#d4edda", padding: 10, marginTop: 10 }}>
-            {mensajeOk}
-          </div>
-        )}
+
   
         {/* Selección evento */}
         <div style={{ marginTop: 20 }}>
@@ -230,7 +313,7 @@ export default function AsignarCategoriasPage() {
           <select
             value={eventoId}
             onChange={(e) => setEventoId(e.target.value ? Number(e.target.value) : "")}
-            style={{ width: "100%", padding: 8 }}
+            style={selectStyle}
           >
             <option value="">-- Seleccione un evento --</option>
             {eventos.map(e => (
@@ -285,6 +368,9 @@ export default function AsignarCategoriasPage() {
                 color: "white",
                 border: "none",
                 borderRadius: 8,
+                cursor: "pointer",
+                boxShadow: "0 4px 12px rgba(37,99,235,0.35)",
+                transition: "all 0.2s",
             }}      
           >
             Guardar Categorías
@@ -299,6 +385,7 @@ export default function AsignarCategoriasPage() {
       <select
         value={eventoFiltroId}
         onChange={(e) => setEventoFiltroId(e.target.value ? Number(e.target.value) : "")}
+        style={selectStyle}
       >
         <option value="">Todos los eventos</option>
         {eventos.map(e => (
@@ -316,7 +403,10 @@ export default function AsignarCategoriasPage() {
             color: "white",
             border: "none",
             borderRadius: 8,     
-            margin: "20px"     
+            margin: "20px",
+            cursor: "pointer",
+            boxShadow: "0 4px 12px rgba(37,99,235,0.35)",
+            transition: "all 0.2s",  
         }}
       >
         Consultar
@@ -327,35 +417,45 @@ export default function AsignarCategoriasPage() {
         {loadingTabla ? (
           <p>Cargando...</p>
         ) : (
-          <table border={1} width="100%">
+          <table width="100%"
+          style={{
+            marginTop: 20,            
+            borderCollapse: "collapse",
+            background: "#FFFFFF",
+            borderRadius: 12,
+            overflow: "hidden",
+            boxShadow: "0 6px 18px rgba(0,0,0,0.08)"
+          }}>
             <thead>
-              <tr>
-                <th>ID Evento</th>
-                <th>Evento</th>
-                <th>Categoría</th>
-                <th>Eliminar</th>
+              <tr style={{background: "linear-gradient(90deg, #007bff, #2563EB)", color: "#FFFFFF", textAlign: "left"}}>
+                <th style={thStyle}>ID Evento</th>
+                <th style={thStyle}>Evento</th>
+                <th style={thStyle}>Categoría</th>
+                <th style={{ ...thStyle, textAlign: "center" }}>Eliminar</th>
               </tr>
             </thead>
             <tbody>
               {tablaEventoCategorias.map((row, i) => (
-                <tr key={i}>
-                  <td>{row.evento_id}</td>
-                  <td>{row.evento_nombre}</td>
-                  <td>{row.categoria_nombre}</td>
-                  <td style={{ textAlign: "center"}}>
+                <tr key={i}
+                style={{background: i % 2 === 0 ? "#F9FAFB" : "#FFFFFF", borderBottom: "1px solid #E5E7EB"}}>
+                  <td style={tdStyle}>{row.evento_id}</td>
+                  <td style={tdStyle}>{row.evento_nombre}</td>
+                  <td style={tdStyle}>{row.categoria_nombre}</td>
+                  <td style={{ ...tdStyle, textAlign: "center"}}>
                     <button
                       style={{ color: "red", 
-                               background: "#bbc2caff", 
+                               background: "#FEE2E2", 
                                padding: "1px 15px", 
-                               border: "1px solid #59636eff",
-                               borderRadius: "6px",
+                               border: "1px solid #FCA5A5",
+                               borderRadius: 6,
+                               cursor: "pointer",                               
                                boxShadow: "0 2px 4px #4f555cff, 0 6px 10px rgba(0,0,0,0.2)"
                               }}
                       onClick={() =>
                         eliminarCategoria(row.evento_id, row.categoria_id)
                       }
                     >
-                      ❌
+                      🗑️
                     </button>
                   </td>
                 </tr>

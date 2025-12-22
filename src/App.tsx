@@ -6,6 +6,9 @@ import CategoriasPage from "./pages/CategoriasPage";
 import ParticipanPage from "./pages/ParticipanPage";
 import AsignarCategoriasPage from "./pages/AsignarCategoriasPage";
 import AsignarParticipantesPage from "./pages/AsignarParticipantesCategoriasPage";
+import JuradosPage from "./pages/JuradosPage";
+import AsignarJuradosPage from "./pages/AsignarJuradosCategoriasPage";
+import CalificacionesPage from "./pages/CalificacionesPage";
 
 function App() {
   return (
@@ -18,6 +21,9 @@ function App() {
         <Route path="/participantes" element={<ParticipanPage />} />
         <Route path="/asignarcategorias" element={<AsignarCategoriasPage />} />
         <Route path="/asignarParticipantes" element={<AsignarParticipantesPage />} />
+        <Route path="/jurados" element={<JuradosPage />} />
+        <Route path="/asignarJurados" element={<AsignarJuradosPage />} />
+        <Route path="/calificaciones" element={<CalificacionesPage />} />
       </Routes>
     </BrowserRouter>
   );

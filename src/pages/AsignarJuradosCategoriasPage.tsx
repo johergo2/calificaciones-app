@@ -2,8 +2,8 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 import {
-  getParticipantes,
-} from "../services/participantesApi";
+  getJurados,
+} from "../services/juradosApi";
 
 import {
   getEventos,
@@ -14,15 +14,15 @@ import {
 } from "../services/categoriasApi";
 
 import {
-  getParticipantesCategoriasEventos,
-  asignarParticipanteCategorias,
-  getCategoriasPorParticipanteEvento,
-  eliminarCategoriaParticipante,
-} from "../services/participantesCategoriasApi";
+  getJuradosCategoriasEventos,
+  asignarJuradoCategorias,
+  getCategoriasPorJuradoEvento,
+  eliminarCategoriaJurado,
+} from "../services/juradosCategoriasApi";
 
 import type {
-  ParticipanteCategoriaEvento,
-} from "../services/participantesCategoriasApi"
+  JuradoCategoriaEvento,
+} from "../services/juradosCategoriasApi"
 
 import type { Evento } from "../services/eventosApi";
 
@@ -31,7 +31,7 @@ import type { Categorias } from "../services/categoriasApi";
 /* ===============================
    Interfaces locales
 ================================ */
-interface Participante {
+interface Jurado {
   cedula: string;
   nombre: string;
 }
@@ -46,13 +46,13 @@ interface Participante {
   categoria: string;
 }*/
 
-export default function AsignarParticipantesCategoriasPage() {
+export default function AsignarJuradosCategoriasPage() {
   const navigate = useNavigate();
 
   /* ===============================
      Estados principales
   ================================ */
-  const [participantes, setParticipantes] = useState<Participante[]>([]);
+  const [jurados, setJurados] = useState<Jurado[]>([]);
   const [eventos, setEventos] = useState<Evento[]>([]);
   const [categorias, setCategorias] = useState<Categorias[]>([]);
 
@@ -68,7 +68,7 @@ const [popupMensaje, setPopupMensaje] = useState("");
   /* ===============================
      Tabla
   ================================ */
-  const [tabla, setTabla] = useState<ParticipanteCategoriaEvento[]>([]);
+  const [tabla, setTabla] = useState<JuradoCategoriaEvento[]>([]);
   const [eventoFiltroId, setEventoFiltroId] = useState<number | "">("");
   const [loadingTabla, setLoadingTabla] = useState(false);
 
@@ -82,7 +82,7 @@ const [popupMensaje, setPopupMensaje] = useState("");
   }, [eventoFiltroId]);
 
   const cargarDatos = async () => {
-    setParticipantes(await getParticipantes());
+    setJurados(await getJurados());
     setEventos(await getEventos());
     setCategorias(await getCategorias());
   };
@@ -100,7 +100,7 @@ const [popupMensaje, setPopupMensaje] = useState("");
   }, [cedula, eventoId]);
 
   const cargarCategoriasAsignadas = async () => {
-    const data = await getCategoriasPorParticipanteEvento(cedula, eventoId as number);
+    const data = await getCategoriasPorJuradoEvento(cedula, eventoId as number);
     setCategoriasSeleccionadas(data.map((c: Categorias) => c.id));
   };
 
@@ -121,13 +121,13 @@ const [popupMensaje, setPopupMensaje] = useState("");
   const guardarAsignacion = async () => {
     if (!cedula || !eventoId) {
       //alert("Debe seleccionar participante y evento");
-      setPopupMensaje("Debe seleccionar participante y evento");
+      setPopupMensaje("Debe seleccionar jurado y evento");
       setMostrarPopup(true);
       return;
     }
 
     try {
-      await asignarParticipanteCategorias({
+      await asignarJuradoCategorias({
         cedula,
         evento_id: eventoId as number,
         categorias: categoriasSeleccionadas,
@@ -151,7 +151,7 @@ const [popupMensaje, setPopupMensaje] = useState("");
   const cargarTabla = async (eventoId?: number) => {
     try {
       setLoadingTabla(true);
-      const data = await getParticipantesCategoriasEventos(eventoId);
+      const data = await getJuradosCategoriasEventos(eventoId);
       console.log("TABLA BACKEND →", data);
       setTabla(data);
     } finally {
@@ -169,7 +169,7 @@ const [popupMensaje, setPopupMensaje] = useState("");
   ) => {
     if (!confirm("¿Eliminar esta asignación?")) return;
 
-    await eliminarCategoriaParticipante(cedula, eventoId, categoriaId);
+    await eliminarCategoriaJurado(cedula, eventoId, categoriaId);
     cargarTabla(eventoFiltroId || undefined);
     cargarCategoriasAsignadas();
   };
@@ -253,7 +253,7 @@ const tdStyle: React.CSSProperties = {
       )}
 
       <h2 style={{ textAlign: "center", color: "#1E40AF", fontWeight: 700, letterSpacing: "0.5PX" }}>
-        ASIGNAR PARTICIPANTES A EVENTOS Y CATEGORÍAS
+        ASIGNAR JURADOS A EVENTOS Y CATEGORÍAS
       </h2>
 
       <div style={{ display: "flex", justifyContent: "flex-end" }}>
@@ -285,13 +285,13 @@ const tdStyle: React.CSSProperties = {
           boxShadow: "0 10px 25px rgba(0,0,0,0.05)"
         }}
       >        
-        {/* Participante */}
-        <label>Participante:</label>
+        {/* Jurado */}
+        <label>Jurado:</label>
         <select value={cedula} onChange={e => setCedula(e.target.value)}
                   style={selectStyle}          
         >
           <option value="">-- Seleccione --</option>
-          {participantes.map(p => (
+          {jurados.map(p => (
             <option key={p.cedula} value={p.cedula}>
               {p.cedula} - {p.nombre}
             </option>
@@ -425,7 +425,7 @@ const tdStyle: React.CSSProperties = {
           <thead>
             <tr style={{ background: "linear-gradient(90deg, #007bff, #2563EB)", color: "#FFFFFF", textAlign: "left"}}>
               <th style={thStyle}>Cédula</th>
-              <th style={thStyle}>Participante</th>
+              <th style={thStyle}>Jurado</th>
               <th style={thStyle}>Evento</th>
               <th style={thStyle}>Categoría</th>
               <th style={{ ...thStyle, textAlign: "center" }}>Eliminar</th>
@@ -435,7 +435,7 @@ const tdStyle: React.CSSProperties = {
             {tabla.map((row, i) => (
               <tr key={i} style={{background: i % 2 === 0 ? "#F9FAFB" : "#FFFFFF", borderBottom: "1px solid #E5E7EB"}}>
                 <td style={tdStyle}>{row.cedula}</td>
-                <td style={tdStyle}>{row.participante}</td>
+                <td style={tdStyle}>{row.jurado}</td>
                 <td style={tdStyle}>{row.evento}</td>
                 <td style={tdStyle}>{row.categoria}</td>
                 <td style={{ ...tdStyle, textAlign: "center" }}>

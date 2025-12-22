@@ -1,28 +1,26 @@
 import { useEffect, useState } from "react";
-import type { Participante } from "../services/participantesApi";
+import type { Jurado } from "../services/juradosApi";
 import {
-  getParticipantes,
-  crearParticipante,
-  actualizarParticipante,
-  eliminarParticipante,
-} from "../services/participantesApi";
+  getJurados,
+  crearJurado,
+  actualizarJurado,
+  eliminarJurado,
+} from "../services/juradosApi";
 import { useNavigate } from "react-router-dom";
 
 
-export default function ParticipanPage() {
-  const [participantes, setParticipantes] = useState<Participante[]>([]);
-  const [editando, setEditando] = useState<Participante | null>(null);
+export default function JuradosPage() {
+  const [jurados, setJurados] = useState<Jurado[]>([]);
+  const [editando, setEditando] = useState<Jurado | null>(null);
 
-  const [formData, setFormData] = useState<Participante>({
+  const [formData, setFormData] = useState<Jurado>({
     cedula: "",
     nombre: "",
-    tipo: "",
     observacion: "",
   });
 
   const [errorCedula, setErrorCedula] = useState<string>("");
   const [errorNombre, setErrorNombre] = useState<string>("");
-  const [errorTipo, setErrorTipo] = useState<string>("");
   const [errorObservacion, setErrorObservacion] = useState<string>("");
 
   //const [mensajeOk, setMensajeOk] = useState<string>("")
@@ -32,13 +30,13 @@ export default function ParticipanPage() {
   const navigate = useNavigate();
 
 
-  const cargarParticipantes = async () => {
-    const data = await getParticipantes();
-    setParticipantes(data);
+  const cargarJurados = async () => {
+    const data = await getJurados();
+    setJurados(data);
   };
 
   useEffect(() => {
-    cargarParticipantes();
+    cargarJurados();
   }, []);
 
  /* const handleChange = (
@@ -50,69 +48,60 @@ export default function ParticipanPage() {
     });
   };*/
 
-  const guardarParticipante = async () => {
+  const guardarJurado = async () => {
   // VALIDACIÓN: Campos obligatorios
   if (!formData.cedula || formData.cedula.trim() === "") {
     setErrorCedula("Debe ingresar una cedula - Obligatorio");
     return; // detener el guardado  
   }  
   if (!formData.nombre || formData.nombre.trim() === "") {
-    setErrorNombre("Debe ingresar el nombre del particpante - Obligatorio");
+    setErrorNombre("Debe ingresar el nombre del jurado - Obligatorio");
     return; // detener el guardado  
   }  
 
-     
-  
     setErrorCedula(""); // limpiar error si hay cedula
     setErrorNombre(""); // limpiar error si hay nombre
-    setErrorTipo(""); // limpiar error si hay tipo
 
     const payload = {
       cedula: formData.cedula.trim(),
       nombre: formData.nombre.trim(),
-      tipo: formData.tipo === "" ? null : formData.tipo,
       observacion: formData.observacion?.trim() || "",
     };
 
     try {
       if (editando) {
-        await actualizarParticipante(editando.id!, payload);
+        await actualizarJurado(editando.id!, payload);
         //setMensajeOk("✔️ Participante actualizado correctamente");
-        setPopupMensaje("✔️ Participante actualizado correctamente");
+        setPopupMensaje("✔️ Jurado actualizado correctamente");
         setMostrarPopup(true);
         setEditando(null);
       } else {
-        await crearParticipante(payload);
+        await crearJurado(payload);
         //setMensajeOk("✔️ Participante creado correctamente");
-        setPopupMensaje("✔️ Participante creado correctamente");
+        setPopupMensaje("✔️ Jurado creado correctamente");
         setMostrarPopup(true);
       }
-    
-    
-
     // Resetear formulario
     setFormData({
       cedula: "",
-      nombre: "",      
-      tipo: "",
+      nombre: "",            
       observacion: "",      
     });
 
-    cargarParticipantes();
+    cargarJurados();
 
     // Ocultar el mensaje después de 4 segundos
     //setTimeout(() => setMensajeOk(""), 4000);
 
   } catch (error) {
-    console.error("Error al guardar evento: ", error);
-    setErrorCedula("Error al guardar participante, revisa los datos.");
-    setErrorNombre("Error al guardar participante, revisa el nombre.");
-    setErrorTipo("Error al guardar participante, selecciona un Tipo.");
+    console.error("Error al guardar jurado: ", error);
+    setErrorCedula("Error al guardar jurado, revisa los datos.");
+    setErrorNombre("Error al guardar jurado, revisa el nombre.");
   }
 
   };
 
-  const editar = (evento: Participante) => {
+  const editar = (evento: Jurado) => {
     setEditando(evento);
     setFormData({
       ...evento,
@@ -121,9 +110,9 @@ export default function ParticipanPage() {
   };
 
   const eliminar = async (id: number) => {
-    if (confirm("¿Seguro que deseas eliminar este participante?")) {
-      await eliminarParticipante(id);
-      cargarParticipantes();
+    if (confirm("¿Seguro que deseas eliminar este jurado?")) {
+      await eliminarJurado(id);
+      cargarJurados();
     }
   };
 
@@ -172,7 +161,7 @@ const botonCerrarStyle: React.CSSProperties = {
 
   return (
     <div style={{ width: "90vw", padding: 20, background: "#f1f5f9", minHeight: "100vh" }}>
-      <h2 style={{ textAlign: "center", color: "#1E40AF", fontWeight: 700, letterSpacing: "0.5PX" }}>GESTIONAR PARTICIPANTES</h2>
+      <h2 style={{ textAlign: "center", color: "#1E40AF", fontWeight: 700, letterSpacing: "0.5PX" }}>GESTIONAR JURADOS</h2>
 
       {/* Botón regresar al menú */}
       <div style={{ width: "100%", display: "flex", justifyContent: "flex-end", marginBottom: "10px" }}>
@@ -220,12 +209,12 @@ const botonCerrarStyle: React.CSSProperties = {
         }}
       >
         <h3 style={{ marginBottom: "10px", textAlign: "center", color: "#444", fontSize: "1.2rem" }}>
-          {editando ? "✏️ Editar Participante" : "📝 Crear Participante"}
+          {editando ? "✏️ Editar Participante" : "📝 Crear Jurado"}
         </h3>
 
         {/* Campo - cedula */}
         <div style={{ marginBottom: "10px" }}>
-          <label style={{ fontWeight: "bold", display: "block", marginBottom: 6 }}>Cedula del Participante:</label>
+          <label style={{ fontWeight: "bold", display: "block", marginBottom: 6 }}>No. Identificación del Jurado:</label>
           <input
             name="cedula"
             placeholder="cedula del participante"
@@ -252,7 +241,7 @@ const botonCerrarStyle: React.CSSProperties = {
         {/* Campo - Nombre */}
         <div style={{ marginBottom: "1px" }}>
           <label style={{ fontWeight: "bold", display: "block", marginBottom: 6 }}>
-            Nombre del Participante:
+            Nombre del Jurado:
           </label>
           <textarea
             name="nombre"
@@ -276,50 +265,6 @@ const botonCerrarStyle: React.CSSProperties = {
               {errorNombre}
             </p>
           )}
-        </div>
-
-        {/* Contenedor de Fecha y Tipo, alineados horizontalmente */}
-        <div
-          style={{
-            display: "flex",
-            flexDirection: "row",
-            gap: "10px",              // espacio entre los campos                     
-            marginBottom: "10px",
-            alignItems: "flex-start", // alinear la parte superior
-          }}
-        >
-              {/* Campo - Tipo */}
-              <div style={{ flex: 3 }}>
-                <label style={{ fontWeight: "bold", display: "block", marginBottom: 6 }}>
-                  Tipo de Participante
-                </label>
-                <select
-                  name="tipo"
-                  value={formData.tipo ?? ""}
-                  onChange={(e) => {
-                    // handleChange ya funciona, pero aquí lo hacemos explícito
-                    setFormData({ ...formData, tipo: e.target.value });
-                    setErrorTipo(""); //Limpiar el error si el usuario ingresa el tipo
-                  }}
-                  style={{
-                    width: "20%",
-                    padding: "6px",
-                    borderRadius: 10,
-                    border: "1px solid #bbb",
-                    fontSize: "1rem",
-                  }}
-                >
-                  <option value=""></option>
-                  <option value='Individual' >Individual</option>
-                  <option value='Equipo' >Equipo</option>
-                  <option value='Grupo' >Grupo</option>                                    
-                </select>
-                {errorTipo && (
-                  <p style={{color: "red", marginTop: 5}}>
-                    {errorTipo}
-                  </p>
-                )}                
-              </div>
         </div>
 
         {/* Campo - Observación */}
@@ -346,13 +291,12 @@ const botonCerrarStyle: React.CSSProperties = {
             <p style={{color: "red", marginTop: 5}}>
               {errorObservacion}
             </p>
-          )}
-          
+          )}          
         </div>
 
         <div style={{ display: "flex", justifyContent: "center", width: "100%" }}>
           <button
-            onClick={guardarParticipante}
+            onClick={guardarJurado}
             style={{
               padding: "10px",
               width: "20%",
@@ -367,7 +311,7 @@ const botonCerrarStyle: React.CSSProperties = {
               transition: "0.3s",
             }}
           >
-            {editando ? "Actualizar" : "Crear Participante"}
+            {editando ? "Actualizar" : "Crear Jurado"}
           </button>
         </div>
       </div>
@@ -392,19 +336,17 @@ const botonCerrarStyle: React.CSSProperties = {
           <tr style={{ background: "linear-gradient(90deg, #007bff, #2563EB)", color: "#FFFFFF", textAlign: "left"}}>
             <th style={{ ...thStyle, width: "5%"}}>ID</th>
             <th style={{ ...thStyle, width: "10%"}}>Cedula</th>
-            <th style={{ ...thStyle, width: "33%"}}>Nombre</th>
-            <th style={{ ...thStyle, width: "10%"}}>Tipo</th>
+            <th style={{ ...thStyle, width: "33%"}}>Nombre</th>            
             <th style={{ ...thStyle, width: "30%"}}>Observacion</th>
             <th style={{ ...thStyle, width: "12%"}}>Eventos</th>
           </tr>
         </thead>
         <tbody>
-          {participantes.map((e) => (
+          {jurados.map((e) => (
             <tr key={e.id} style={{ borderBottom: "1px solid #ddd" }}>
               <td style={{ border: "1px solid #141313ff", padding: 8 }}>{e.id}</td>
               <td style={{ border: "1px solid #141313ff", padding: 8 }}>{e.cedula}</td>
-              <td style={{ border: "1px solid #141313ff", padding: 8 }}>{e.nombre}</td>
-              <td style={{ border: "1px solid #141313ff", padding: 8 }}>{e.tipo}</td>
+              <td style={{ border: "1px solid #141313ff", padding: 8 }}>{e.nombre}</td>              
               <td style={{ border: "1px solid #141313ff", padding: 8 }}>{e.observacion}</td>
               <td style={{ border: "1px solid #141313ff", padding: 8 }}>
                 <button 
