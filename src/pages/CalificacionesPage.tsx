@@ -20,7 +20,7 @@ export default function CalificacionesPage() {
   /* ===============================
      Estados base
   ================================ */
-  const [jurados, setJurados] = useState<Jurado[]>([]);
+  const [, setJurados] = useState<Jurado[]>([]);
   const [eventos, setEventos] = useState<Evento[]>([]);
   const [categorias, setCategorias] = useState<Categorias[]>([]);
 
