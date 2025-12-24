@@ -15,20 +15,34 @@ export interface Calificaciones {
 }
 
 // Obtener todas las calificaciones
-export const getCalificaciones = async (): Promise<Calificaciones[]> => {
-  const response = await axios.get(`${API_URL}/calificaciones`);
+export const getCalificaciones = async (eventoId?: number) => {  
+  const response = await axios.get(`${API_URL}/calificaciones`, {
+    params: eventoId ? {evento_id: eventoId } : {},
+  });
   return response.data.calificaciones;
+};
+
+// Obtener todas las calificaciones con descripciones en cada campo
+export const getCalificacionestot = async (eventoId?: number) => {  
+  const url = eventoId
+    ? `${API_URL}/calificaciones?evento_id=${eventoId}`
+    : `${API_URL}/calificaciones`;
+
+  const response = await axios.get(url);
+  return response.data;
 };
 
 // Crear calificacion
 export const crearCalificacion = async (data: {
                                           cedula_jurado: string;
-                                          cedula_participante: string;
+                                          cedula_participan: string;
                                           evento_id: number;
                                           categoria_id: number;
                                           puntaje: number;
                                         }) => {
+  console.log("📤 Datos enviados a la API /calificaciones:", data);                                            
   const response = await axios.post(`${API_URL}/calificaciones`, data);
+  console.log("📥 Respuesta de la API:", response.data);
   return response.data;
 };
 

@@ -133,6 +133,47 @@ FROM calificaciones
 WHERE evento_id = :evento_id
 ORDER BY evento_id
 
+select * from calificaciones
+
+delete from calificaciones where cedula_participan = '16780919'
 
 INSERT INTO calificaciones (cedula_jurado, cedula_participan, evento_id, categoria_id, puntaje)
 VALUES ('66458957','16780917','19','2',7.5)
+
+
+SELECT
+  c.id,
+  j.nombre        AS jurado,
+  e.nombre        AS evento,
+  cat.categoria   AS categoria,
+  p.nombre        AS participante,
+  c.puntaje
+FROM calificaciones c
+JOIN jurados j
+  ON j.cedula = c.cedula_jurado
+JOIN eventos e
+  ON e.id = c.evento_id
+JOIN categorias cat
+  ON cat.id = c.categoria_id
+JOIN participantes p
+  ON p.cedula = c.cedula_participan;
+
+
+
+SELECT
+  c.id,
+  j.cedula||'-'||j.nombre        AS jurado,
+  e.id||'-'||e.nombre        AS evento,
+  cat.categoria   AS categoria,
+  p.nombre        AS participante,
+  c.puntaje
+FROM calificaciones c, jurados j, eventos e, categorias cat, participantes p
+WHERE j.cedula = c.cedula_jurado
+AND   e.id = c.evento_id
+AND   cat.id = c.categoria_id
+AND   p.cedula = c.cedula_participan;
+
+   
+
+
+ 
