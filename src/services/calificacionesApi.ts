@@ -14,6 +14,17 @@ export interface Calificaciones {
   fecha_actualizacion?: string;
 }
 
+export interface CalificacionTot {
+  id: number;
+  jurado: string;
+  evento: string;
+  categoria: string;
+  participante: string;
+  puntaje: number;
+}
+
+export interface CalificacionTotResponse {calificacionestot: CalificacionTot[]}
+
 // Obtener todas las calificaciones
 export const getCalificaciones = async (eventoId?: number) => {  
   const response = await axios.get(`${API_URL}/calificaciones`, {
@@ -25,10 +36,10 @@ export const getCalificaciones = async (eventoId?: number) => {
 // Obtener todas las calificaciones con descripciones en cada campo
 export const getCalificacionestot = async (eventoId?: number) => {  
   const url = eventoId
-    ? `${API_URL}/calificaciones?evento_id=${eventoId}`
-    : `${API_URL}/calificaciones`;
+    ? `${API_URL}/calificacionestot?evento_id=${eventoId}`
+    : `${API_URL}/calificacionestot`;
 
-  const response = await axios.get(url);
+  const response = await axios.get<CalificacionTotResponse>(url);
   return response.data;
 };
 

@@ -6,14 +6,14 @@ import { getEventos } from "../services/eventosApi";
 import { getCategorias } from "../services/categoriasApi";
 import { getJuradosCategoriasEventos } from "../services/juradosCategoriasApi";
 import { getParticipantesCategoriasEventos } from "../services/participantesCategoriasApi";
-import { crearCalificacion, getCalificaciones } from "../services/calificacionesApi";
+import { getCalificacionestot, crearCalificacion } from "../services/calificacionesApi";
 
 import type { Evento } from "../services/eventosApi";
 import type { Categorias } from "../services/categoriasApi";
 import type { Jurado } from "../services/juradosApi"
 //import type { Participante } from "../services/participantesApi"
 import type { ParticipanteCategoriaEvento } from "../services/participantesCategoriasApi";
-import type { Calificaciones } from "../services/calificacionesApi";
+import type { CalificacionTot } from "../services/calificacionesApi";
 
 
 export default function CalificacionesPage() {
@@ -33,7 +33,7 @@ export default function CalificacionesPage() {
   const [participantes, setParticipantes] = useState<ParticipanteCategoriaEvento[]>([]);
 
   
-  const [calificaciones, setCalificaciones] = useState<Calificaciones[]>([]);  
+  const [calificaciones, setCalificaciones] = useState<CalificacionTot[]>([]);  
   const [eventoFiltroId, setEventoFiltroId] = useState<number | "">("");
   const [loading, setLoading] = useState(false);
   const [loadingTabla, setLoadingTabla] = useState(false);
@@ -71,6 +71,7 @@ export default function CalificacionesPage() {
       : cargarCalificaciones(eventoFiltroId);
     }, [eventoFiltroId]);
 
+    
   const cargarDatosIniciales = async () => {
     try {
       const [juradosData, eventosData, categoriasData, asignacionesData] =
@@ -101,11 +102,11 @@ export default function CalificacionesPage() {
 
   const cargarCalificaciones = async (eventoId?: number) => {
     try {
-      setLoading(true);
-      const data = await getCalificaciones(eventoId);
-      setCalificaciones(data);
+      setLoadingTabla(true);
+      const response = await getCalificacionestot(eventoId);
+      setCalificaciones(response.calificacionestot);
     } finally {
-      setLoading(false);
+      setLoadingTabla(false);
     }
   };
 
@@ -523,10 +524,32 @@ export default function CalificacionesPage() {
                 <th style={thStyle}>Evento</th>
                 <th style={thStyle}>Categoría</th>
                 <th style={thStyle}>Participante</th>
+                <th style={thStyle}>Puntaje</th>
                 <th style={{ ...thStyle, textAlign: "center" }}>Acción</th>
               </tr>
             </thead>
-
+            <tbody>
+              {calificaciones.length === 0 ? (
+                <tr>
+                  <td colSpan={6} style={{ textAlign: "center", padding: 20 }}>
+                    No hay calificaciones registradas
+                  </td>
+                </tr>
+              ) : (
+                calificaciones.map((c, index) => (
+                  <tr key={index}>
+                    <td style={tdStyle}>{c.jurado}</td>
+                    <td style={tdStyle}>{c.evento}</td>
+                    <td style={tdStyle}>{c.categoria}</td>
+                    <td style={tdStyle}>{c.participante}</td>
+                    <td style={{ ...tdStyle, textAlign: "center" }}>{c.puntaje}</td>
+                    <td style={{ ...tdStyle, textAlign: "center" }}>
+                      —
+                    </td>
+                  </tr>
+                ))
+              )}
+            </tbody>
           </table>
       )
     }
