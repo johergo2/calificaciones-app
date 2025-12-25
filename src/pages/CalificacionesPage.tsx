@@ -243,13 +243,15 @@ export default function CalificacionesPage() {
     display: "flex",
     alignItems: "center",
     marginTop: 12,
+    gap: 10,
+    flexWrap: "wrap",
   };
 
   const labelStyle: React.CSSProperties = {
-    width: 140,
+    minWidth: 120,
     fontWeight: "bold",
     color: "#1E293B",
-    marginLeft: "30px",
+    //marginLeft: "30px",
   };
 
   const campoStyle: React.CSSProperties = {
@@ -282,6 +284,7 @@ export default function CalificacionesPage() {
     padding: "10px 14px",
     fontSize: "0.8rem",
     color: "#374151",
+    whiteSpace: "nowrap",
     borderRight: "1px solid #9db9f1ff",
   };
 
@@ -314,7 +317,8 @@ export default function CalificacionesPage() {
                   style={{
                     background: "#007bff",
                     color: "white",
-                    fontSize: "0.6rem",
+                    fontSize: "0.75rem",
+                    padding: "6px 12px",
                     //height: "15px",
                     cursor: "pointer",
                     boxShadow: "0 4px 12px rgba(37,99,235,0.35)",
@@ -336,9 +340,10 @@ export default function CalificacionesPage() {
           borderRadius: 16,
           background: "#FFFFFF",
           boxShadow: "0 10px 25px rgba(0,0,0,0.05)",
-          display: "flex",
-          flexDirection: "column",
-          gap: "12px",
+          display: "grid",
+          gridTemplateColumns: "1fr",
+          gap: 12,
+          flexDirection: "column",          
         }}
       >
 
@@ -510,10 +515,12 @@ export default function CalificacionesPage() {
       {loadingTabla ? (
         <p>Cargando...</p>        
       ) : (
-          <table 
+          <div style={{ overflowX: "auto", width: "100%" }}>
+          <table           
             width="100%" 
               style={{ 
-                marginTop: 20,            
+                marginTop: 20, 
+                minWidth: 900,           
                 borderCollapse: "collapse",
                 background: "#FFFFFF",
                 borderRadius: 12,
@@ -524,15 +531,15 @@ export default function CalificacionesPage() {
             <thead>
               <tr style={{ background: "linear-gradient(90deg, #007bff, #2563EB)", 
                            color: "#FFFFFF", textAlign: "center"}}>
-                <th style={{ ...thStyle, width: "7%"}}>Cedula</th>
-                <th style={{ ...thStyle, width: "18%"}}>Jurado</th>
-                <th style={{ ...thStyle, width: "2%"}}>ID</th>
-                <th style={{ ...thStyle, width: "20%"}}>Evento</th>
-                <th style={{ ...thStyle, width: "2%"}}>ID</th>
-                <th style={{ ...thStyle, width: "9%"}}>Categoría</th>
-                <th style={{ ...thStyle, width: "6%"}}>No. ID</th>
-                <th style={{ ...thStyle, width: "29%"}}>Participante</th>
-                <th style={{ ...thStyle, width: "7%"}}>Puntaje</th>                
+                <th style={thStyle}>Cedula</th>
+                <th style={thStyle}>Jurado</th>
+                <th style={thStyle}>ID</th>
+                <th style={thStyle}>Evento</th>
+                <th style={thStyle}>ID</th>
+                <th style={thStyle}>Categoría</th>
+                <th style={thStyle}>No. ID</th>
+                <th style={thStyle}>Participante</th>
+                <th style={thStyle}>Puntaje</th>                
               </tr>
             </thead>
             <tbody>
@@ -559,6 +566,7 @@ export default function CalificacionesPage() {
               )}
             </tbody>
           </table>
+          </div>
       )
     }
 
