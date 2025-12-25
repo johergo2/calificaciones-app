@@ -71,7 +71,7 @@ export default function CalificacionesPage() {
       : cargarCalificaciones(eventoFiltroId);
     }, [eventoFiltroId]);
 
-    
+
   const cargarDatosIniciales = async () => {
     try {
       const [juradosData, eventosData, categoriasData, asignacionesData] =
@@ -88,7 +88,7 @@ export default function CalificacionesPage() {
         setAsignaciones(asignacionesData);        
 
         const cedulasUnicas = Array.from(
-          new Set(asignaciones.map(a => a.cedula))
+          new Set(asignacionesData.map(a => a.cedula))
         );
 
         setJuradosAsignados(
@@ -194,8 +194,12 @@ export default function CalificacionesPage() {
       setFormData({ ...formData, cedula_participan: "", puntaje: "" });
 
     } catch (error: any) {
-      console.error("Error API:", error?.response?.data || error);
-      setPopupMensaje("❌ Error al guardar la calificación");
+        if (error?.response?.status === 409) {
+          setPopupMensaje("⚠️ El participante ya tiene una calificación registrada");
+        } else {
+          console.error("Error API:", error?.response?.data || error);
+          setPopupMensaje("❌ Error al guardar la calificación");
+        }      
       setMostrarPopup(true);
     }
   };
@@ -276,7 +280,7 @@ export default function CalificacionesPage() {
 
   const tdStyle: React.CSSProperties = {
     padding: "10px 14px",
-    fontSize: "0.9rem",
+    fontSize: "0.8rem",
     color: "#374151",
     borderRight: "1px solid #9db9f1ff",
   };
@@ -520,12 +524,15 @@ export default function CalificacionesPage() {
             <thead>
               <tr style={{ background: "linear-gradient(90deg, #007bff, #2563EB)", 
                            color: "#FFFFFF", textAlign: "center"}}>
-                <th style={thStyle}>Jurado</th>
-                <th style={thStyle}>Evento</th>
-                <th style={thStyle}>Categoría</th>
-                <th style={thStyle}>Participante</th>
-                <th style={thStyle}>Puntaje</th>
-                <th style={{ ...thStyle, textAlign: "center" }}>Acción</th>
+                <th style={{ ...thStyle, width: "7%"}}>Cedula</th>
+                <th style={{ ...thStyle, width: "18%"}}>Jurado</th>
+                <th style={{ ...thStyle, width: "2%"}}>ID</th>
+                <th style={{ ...thStyle, width: "20%"}}>Evento</th>
+                <th style={{ ...thStyle, width: "2%"}}>ID</th>
+                <th style={{ ...thStyle, width: "9%"}}>Categoría</th>
+                <th style={{ ...thStyle, width: "6%"}}>No. ID</th>
+                <th style={{ ...thStyle, width: "29%"}}>Participante</th>
+                <th style={{ ...thStyle, width: "7%"}}>Puntaje</th>                
               </tr>
             </thead>
             <tbody>
@@ -538,14 +545,15 @@ export default function CalificacionesPage() {
               ) : (
                 calificaciones.map((c, index) => (
                   <tr key={index}>
+                    <td style={tdStyle}>{c.cedula_jurado}</td>
                     <td style={tdStyle}>{c.jurado}</td>
+                    <td style={tdStyle}>{c.evento_id}</td>
                     <td style={tdStyle}>{c.evento}</td>
+                    <td style={tdStyle}>{c.categoria_id}</td>
                     <td style={tdStyle}>{c.categoria}</td>
+                    <td style={tdStyle}>{c.cedula_participan}</td>
                     <td style={tdStyle}>{c.participante}</td>
-                    <td style={{ ...tdStyle, textAlign: "center" }}>{c.puntaje}</td>
-                    <td style={{ ...tdStyle, textAlign: "center" }}>
-                      —
-                    </td>
+                    <td style={{ ...tdStyle, textAlign: "center" }}>{c.puntaje}</td>                  
                   </tr>
                 ))
               )}

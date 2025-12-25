@@ -16,9 +16,13 @@ export interface Calificaciones {
 
 export interface CalificacionTot {
   id: number;
+  cedula_jurado: string,
   jurado: string;
+  evento_id: string,
   evento: string;
+  categoria_id: string,
   categoria: string;
+  cedula_participan: string,
   participante: string;
   puntaje: number;
 }
