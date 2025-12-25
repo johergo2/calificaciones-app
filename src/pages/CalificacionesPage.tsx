@@ -35,7 +35,7 @@ export default function CalificacionesPage() {
   
   const [calificaciones, setCalificaciones] = useState<CalificacionTot[]>([]);  
   const [eventoFiltroId, setEventoFiltroId] = useState<number | "">("");
-  const [loading, setLoading] = useState(false);
+  //const [loading, setLoading] = useState(false);
   const [loadingTabla, setLoadingTabla] = useState(false);
 
 
