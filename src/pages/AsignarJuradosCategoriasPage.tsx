@@ -133,13 +133,13 @@ const [popupMensaje, setPopupMensaje] = useState("");
         categorias: categoriasSeleccionadas,
       });
 
-      setPopupMensaje("✔️ Categorías asignadas correctamente");
+      setPopupMensaje("✔️ Jurados asignadas correctamente");
       setMostrarPopup(true);
 
       cargarTabla(eventoFiltroId || undefined);
 
     } catch (error) {
-      setPopupMensaje("❌ Error al asignar categorías");
+      setPopupMensaje("❌ Error al asignar Jurados");
       setMostrarPopup(true);
     }
     //setTimeout(() => setMensajeOk(""), 4000);

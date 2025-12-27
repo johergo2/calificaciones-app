@@ -164,8 +164,8 @@ SELECT
   c.id,
   j.cedula||'-'||j.nombre        AS jurado,
   e.id||'-'||e.nombre        AS evento,
-  cat.categoria   AS categoria,
-  p.nombre        AS participante,
+  cat.id||'-'||cat.categoria   AS categoria,
+  p.cedula||'-'||p.nombre        AS participante,
   c.puntaje
 FROM calificaciones c, jurados j, eventos e, categorias cat, participantes p
 WHERE j.cedula = c.cedula_jurado
@@ -175,5 +175,4 @@ AND   p.cedula = c.cedula_participan;
 
    
 
-
- 
+select * from calificaciones
