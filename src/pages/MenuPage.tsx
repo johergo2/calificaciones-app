@@ -108,7 +108,8 @@ export default function MenuPage() {
            style={botonEstilo}
          >
            Consultar Calificaciones
-         </button>         
+         </button>  
+                
         </div>
       </div>
     </div>
