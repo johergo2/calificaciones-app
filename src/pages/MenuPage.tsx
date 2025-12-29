@@ -102,6 +102,13 @@ export default function MenuPage() {
          >
            Calificar Participante
          </button>
+
+         <button
+           onClick={() => navigate("/ConsultaCalificaciones")}
+           style={botonEstilo}
+         >
+           Consultar Calificaciones
+         </button>         
         </div>
       </div>
     </div>

@@ -9,6 +9,7 @@ import AsignarParticipantesPage from "./pages/AsignarParticipantesCategoriasPage
 import JuradosPage from "./pages/JuradosPage";
 import AsignarJuradosPage from "./pages/AsignarJuradosCategoriasPage";
 import CalificacionesPage from "./pages/CalificacionesPage";
+import CalificacionesTab from "./pages/CalificacionesTab";
 
 function App() {
   return (
@@ -24,6 +25,7 @@ function App() {
         <Route path="/jurados" element={<JuradosPage />} />
         <Route path="/asignarJurados" element={<AsignarJuradosPage />} />
         <Route path="/calificaciones" element={<CalificacionesPage />} />
+        <Route path="/ConsultaCalificaciones" element={<CalificacionesTab />} />        
       </Routes>
     </BrowserRouter>
   );

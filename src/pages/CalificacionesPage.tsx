@@ -325,7 +325,7 @@ export default function CalificacionesPage() {
                     transition: "all 0.2s",
                   }}                    
         >          
-           Volver al Menú</button>
+          ⬅ Volver al Menú</button>
       </div>
 
       {/* ===============================

@@ -29,6 +29,8 @@ export interface CalificacionTot {
 
 export interface CalificacionTotResponse {calificacionestot: CalificacionTot[]}
 
+export interface CalificacionTabResponse {calificacionestot: CalificacionTot[]}
+
 // Obtener todas las calificaciones
 export const getCalificaciones = async (eventoId?: number) => {  
   const response = await axios.get(`${API_URL}/calificaciones`, {
@@ -45,6 +47,12 @@ export const getCalificacionestot = async (eventoId?: number) => {
 
   const response = await axios.get<CalificacionTotResponse>(url);
   return response.data;
+};
+
+// Obtener todas las calificaciones con descripciones en cada campo para la consulta (Tabla)
+export const getCalificacionestab = async (): Promise<CalificacionTot[]> => {  
+  const response = await axios.get<CalificacionTabResponse>(`${API_URL}/calificacionestot`);
+  return response.data.calificacionestot;
 };
 
 // Crear calificacion
