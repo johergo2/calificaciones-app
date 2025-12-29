@@ -71,14 +71,7 @@ export default function CalificacionesTab() {
   /*********************************************
   * Estilos para los campos del formulario
    *********************************************/
-  const selectStyle: React.CSSProperties = {
-    fontSize: "0.9rem",
-    padding: "4px 12px",
-    borderRadius: 8,
-    border: "1px solid #CBD5E1",
-    background: "#FFFFFF",
-    //marginLeft: "20px"
-  };
+
   
   const thStyle: React.CSSProperties = {
     padding: "12px 14px",
