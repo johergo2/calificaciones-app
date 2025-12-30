@@ -25,7 +25,7 @@ function App() {
         <Route path="/jurados" element={<JuradosPage />} />
         <Route path="/asignarJurados" element={<AsignarJuradosPage />} />
         <Route path="/calificaciones" element={<CalificacionesPage />} />
-        <Route path="/ConsultaCalificaciones" element={<CalificacionesTab />} />        
+        <Route path="/ConsultaCalificaciones" element={<CalificacionesTab />} />             
       </Routes>
     </BrowserRouter>
   );

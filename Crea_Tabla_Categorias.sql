@@ -175,4 +175,4 @@ AND   p.cedula = c.cedula_participan;
 
    
 
-select * from calificaciones
+select * from calificaciones where cedula_participan = '16780919'

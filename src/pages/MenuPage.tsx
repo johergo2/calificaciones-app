@@ -3,6 +3,16 @@ import { useNavigate } from "react-router-dom";
 export default function MenuPage() {
   const navigate = useNavigate();
 
+const cerrarSesion = () => {
+  // Elimina datos de autenticación
+  localStorage.removeItem("token");
+  localStorage.removeItem("usuario");
+
+  // Redirige al login
+  navigate("/", { replace: true });
+};
+
+
   return (
     <div
       style={{
@@ -30,11 +40,35 @@ export default function MenuPage() {
       }}
       >
 
+        <div style={{ display: "flex", justifyContent: "flex-end" }}>
+          <button
+            onClick={cerrarSesion}
+            style={{
+              position: "absolute",
+              top: 30,
+              right: 150,
+              background: "#007bff",
+              color: "white",
+              padding: "6px 12px",
+              borderRadius: 8,
+              border: "none",
+              cursor: "pointer",
+              fontWeight: 600,
+              fontSize: "0.8rem",
+              zIndex: 10,
+            }}
+          >
+            Cerrar sesión
+          </button>
+        </div>
+
+
         {/* TÍTULO PRINCIPAL */}
         <h1
           style={{
             fontSize: "1.8rem",
             fontWeight: "bold",
+            marginTop: "90px",
             marginBottom: "30px",
             color: "#333",
           }}

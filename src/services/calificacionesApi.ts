@@ -69,6 +69,21 @@ export const crearCalificacion = async (data: {
   return response.data;
 };
 
+//Obtener ID de la tabla calificaciones
+export const getCalificacionById = async (id: number) => {
+  const res = await fetch(`${API_URL}/calificaciones/${id}`);
+  return res.json();
+};
+// Actualizar calificación del ID obtenido en la anterior
+export const updateCalificacion = async (id: number, data: any) => {
+  await fetch(`${API_URL}/calificaciones/${id}`, {
+    method: "PUT",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(data),
+  });
+};
+
+
 // Actualizar calificacion
 export const actualizarCalificacion = async (id: number, calificacion: Calificaciones) => {
   const response = await axios.put(`${API_URL}/calificaciones/${id}`, calificacion);
@@ -77,6 +92,6 @@ export const actualizarCalificacion = async (id: number, calificacion: Calificac
 
 // Eliminar calificacion
 export const eliminarCalificacion = async (id: number) => {
-  const response = await axios.delete(`${API_URL}/calificacion/${id}`);
+  const response = await axios.delete(`${API_URL}/calificaciones/${id}`);
   return response.data;
 };

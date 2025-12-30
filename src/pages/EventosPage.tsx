@@ -475,7 +475,7 @@ const tdStyle: React.CSSProperties = {
               <td style={tdStyle}>{e.estado}</td>
               <td>              
                 <button 
-                  style={{background: "#bbc2caff", 
+                  style={{background: "#2b70beff", 
                           border: "1px solid #59636eff", 
                           color: "#100dccff", 
                           borderRadius: 6, 
@@ -484,7 +484,7 @@ const tdStyle: React.CSSProperties = {
                           padding: "3px 15px",}}
                   onClick={() => editar(e)}>📝</button>
                 <button
-                  style={{background: "#bbc2caff", 
+                  style={{background: "#2b70beff", 
                           border: "1px solid #59636eff", 
                           color: "#100dccff", 
                           borderRadius: 6, 

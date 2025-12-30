@@ -4,12 +4,20 @@ import { useNavigate } from "react-router-dom";
 
 import type { CalificacionTot } from "../services/calificacionesApi";
 import { getCalificacionestab } from "../services/calificacionesApi";
+import { updateCalificacion } from "../services/calificacionesApi";
+import { eliminarCalificacion } from "../services/calificacionesApi";
+
+
 
 export default function CalificacionesTab() {
   const navigate = useNavigate();
 
   /* Estados */
   const [calificaciones, setCalificaciones] = useState<CalificacionTot[]>([]);
+  const [editando, setEditando] = useState<CalificacionTot | null>(null);
+  const [mostrarModal, setMostrarModal] = useState(false);
+  const [puntajeEditado, setPuntajeEditado] = useState("");
+
 
   /* Filtros por Columna (Cabecera de la Tabla) */
   const [filters, setFilters] = useState({
@@ -37,6 +45,72 @@ export default function CalificacionesTab() {
       console.error("Error cargando calificaciones", error);
     }
   };
+
+  const editar = (calificacion: CalificacionTot) => {
+      setEditando(calificacion);
+      setPuntajeEditado(String(calificacion.puntaje));
+      setMostrarModal(true);
+      //navigate(`/EditarCalificaciones/${calificacion.id}`);
+  };
+
+  const deleteCalificacion = async (calificacion: CalificacionTot) => {
+    const confirmar = window.confirm(
+      `¿Está seguro de eliminar la calificación del participante "${calificacion.participante}"?`
+    );
+
+    if (!confirmar) return;
+
+    try {
+      console.log("Si - Eliminando ID:", calificacion.id);
+      await eliminarCalificacion(calificacion.id);
+      await cargarCalificaciones();
+    } catch (error) {
+      console.log("No - Eliminando ID:", calificacion.id);
+      console.error("Error eliminando calificación", error);
+      alert("No se pudo eliminar la calificación");
+    }
+  };
+
+
+  const guardarCambios = async () => {
+  // 1️⃣ Validación básica
+  if (!editando) {
+    alert("No hay ninguna calificación seleccionada");
+    return;
+  }
+
+  const nuevoPuntaje = Number(puntajeEditado);
+
+  if (isNaN(nuevoPuntaje)) {
+    alert("El puntaje debe ser un número válido");
+    return;
+  }
+
+  if (nuevoPuntaje < 0 || nuevoPuntaje > 100) {
+    alert("El puntaje debe estar entre 0 y 100");
+    return;
+  }
+
+  try {
+    // 2️⃣ Llamada al backend
+    await updateCalificacion(editando.id, {
+      puntaje: nuevoPuntaje,
+    });
+
+    // 3️⃣ Cerrar modal y limpiar estado
+    setMostrarModal(false);
+    setEditando(null);
+    setPuntajeEditado("");
+
+    // 4️⃣ Refrescar la tabla
+    await cargarCalificaciones();
+
+  } catch (error) {
+    console.error("Error al actualizar la calificación", error);
+    alert("Ocurrió un error al guardar los cambios");
+  }
+};
+
 
   /* Lógica de Filtrado */
   const calificacionesFiltradas = calificaciones.filter(c =>
@@ -66,13 +140,9 @@ export default function CalificacionesTab() {
       )
     );
   };
-
-
   /*********************************************
   * Estilos para los campos del formulario
    *********************************************/
-
-  
   const thStyle: React.CSSProperties = {
     padding: "12px 14px",
     fontSize: "0.85rem",
@@ -120,6 +190,49 @@ export default function CalificacionesTab() {
     background: "#FFFFFF",
   };
 
+  const overlayStyle: React.CSSProperties = {
+    position: "fixed",
+    top: 0,
+    left: 0,
+    width: "100vw",
+    height: "100vh",
+    background: "rgba(0,0,0,0.5)",
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+    zIndex: 999,
+  };
+
+  const modalStyle: React.CSSProperties = {
+    background: "#FFFFFF",
+    padding: 25,
+    borderRadius: 12,
+    width: 400,
+    boxShadow: "0 10px 30px rgba(0,0,0,0.2)",
+  };
+
+  const labelStyle: React.CSSProperties = {
+    fontSize: "0.8rem",
+    fontWeight: 600,
+    color: "#374151",
+  };
+
+  const btnCancelarStyle: React.CSSProperties = {
+    background: "#E5E7EB",
+    padding: "6px 12px",
+    borderRadius: 6,
+    border: "none",
+    cursor: "pointer",
+  };
+
+  const btnGuardarStyle: React.CSSProperties = {
+    background: "#2563EB",
+    color: "white",
+    padding: "6px 14px",
+    borderRadius: 6,
+    border: "none",
+    cursor: "pointer",
+  };
 
 
   /* ===============================
@@ -154,7 +267,7 @@ export default function CalificacionesTab() {
          TABLA
       ================================ */}
       
-          <div style={{ maxHeight: "80vh", overflowY: "auto", overflowX: "auto", marginTop: 2 }}>
+          <div style={{ maxHeight: "75vh", overflowY: "auto", overflowX: "auto", marginTop: 2 }}>
             <table           
               width="100%" 
                 style={{ 
@@ -179,7 +292,8 @@ export default function CalificacionesTab() {
                   <th style={thStyle}>Categoría</th>
                   <th style={thStyle}>No. ID</th>
                   <th style={thStyle}>Participante</th>
-                  <th style={{ ...thStyle, borderTopRightRadius: 12}}>Puntaje</th>                
+                  <th style={thStyle}>Puntaje</th> 
+                  <th style={{ ...thStyle, borderTopRightRadius: 12}}>Acción</th>               
                 </tr>
                 {/*FILA DE FILTROS*/}
                 <tr>
@@ -283,7 +397,7 @@ export default function CalificacionesTab() {
                     </select>                
                   </th>    
 
-                </tr>
+                </tr> {/*Fin Fila de Filtros*/}
               </thead>
               <tbody>
                 {calificacionesFiltradas.length === 0 ? (
@@ -303,13 +417,107 @@ export default function CalificacionesTab() {
                       <td style={tdStyle}>{c.categoria}</td>
                       <td style={tdStyle}>{c.cedula_participan}</td>
                       <td style={tdStyle}>{c.participante}</td>
-                      <td style={{ ...tdStyle, textAlign: "center" }}>{c.puntaje}</td>                  
+                      <td style={{ ...tdStyle, textAlign: "center" }}>{c.puntaje}</td>    
+                      <td>
+                        <div
+                         style={{
+                                display: "flex",
+                                justifyContent: "center",
+                                alignItems: "center",
+                                gap: 6,
+                                }}
+                        >
+                          <button 
+                            style={{background: "#2365EC", 
+                                    border: "1px solid #59636eff", 
+                                    color: "#100dccff", 
+                                    borderRadius: 6, 
+                                    margin: "4px",
+                                    cursor: "pointer", 
+                                    flexWrap: "nowrap",
+                                    padding: "3px 7px",}}
+                            onClick={() => editar(c)}>📝
+                          </button>  
+                          <button
+                            onClick={() => deleteCalificacion(c)}
+                            title="Eliminar"
+                            style={{
+                              background: "#2365EC",
+                              border: "none",
+                              color: "white",
+                              borderRadius: 6,
+                              cursor: "pointer",
+                              flexWrap: "nowrap",
+                              padding: "4px 9px",
+                            }}
+                          >
+                            🗑️
+                          </button>   
+                        </div>                                           
+                      </td>               
                     </tr>
                   ))
                 )}
               </tbody>
             </table>          
           </div>
+          {mostrarModal && editando && (
+            <div style={overlayStyle}>
+              <div style={modalStyle}>
+                <h3 style={{ marginBottom: 15, color: "#1E40AF" }}>
+                  Editar Calificación
+                </h3>
+
+                <div style={{ marginBottom: 12 }}>
+                  <label style={labelStyle}>Participante</label>
+                  <input
+                    value={editando.participante}
+                    disabled
+                    style={{
+                      width: "100%",
+                      padding: "8px 10px",
+                      borderRadius: 6,
+                      border: "1px solid #CBD5E1",
+                      marginTop: 4,
+                      background: "#F3F4F6",
+                    }}
+                  />
+                </div>
+
+                <div style={{ marginBottom: 20 }}>
+                  <label style={labelStyle}>Puntaje</label>
+                  <input
+                    type="number"
+                    value={puntajeEditado}
+                    onChange={e => setPuntajeEditado(e.target.value)}
+                    style={{
+                      width: "100%",
+                      padding: "8px 10px",
+                      borderRadius: 6,
+                      border: "1px solid #CBD5E1",
+                      marginTop: 4,
+                    }}
+                  />
+                </div>
+
+                <div style={{ display: "flex", justifyContent: "flex-end", gap: 10 }}>
+                  <button
+                    onClick={() => setMostrarModal(false)}
+                    style={btnCancelarStyle}
+                  >
+                    Cancelar
+                  </button>
+
+                  <button
+                    onClick={guardarCambios}
+                    style={btnGuardarStyle}
+                  >
+                    Guardar
+                  </button>
+                </div>
+              </div>
+            </div>
+          )}
     </div>
   );
 }
