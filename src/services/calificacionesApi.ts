@@ -95,3 +95,31 @@ export const eliminarCalificacion = async (id: number) => {
   const response = await axios.delete(`${API_URL}/calificaciones/${id}`);
   return response.data;
 };
+
+// Función para consultar si existen calificaciones promedio en la tabla
+export const existenPromedios = async () => {
+  const response = await fetch(
+    `${API_URL}/calificaciones-promedio/existen`
+  );
+
+  if (!response.ok) {
+    throw new Error("Error consultando promedios");
+  }
+
+  return response.json(); // { existen: boolean, total: number }
+};
+
+
+// Función para enviar al Backend las calificaciones promedio
+export const insertarCalificacionesPromedio = async () => {
+  const response = await fetch(
+    `${API_URL}/calificaciones-promedio`, {
+      method: "POST",
+      }    
+  );
+
+  if (!response.ok) {
+    throw new Error("Error insertando calificaciones promedio");
+  }
+  return await response.json();
+};

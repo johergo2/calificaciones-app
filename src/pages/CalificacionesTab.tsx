@@ -6,7 +6,8 @@ import type { CalificacionTot } from "../services/calificacionesApi";
 import { getCalificacionestab } from "../services/calificacionesApi";
 import { updateCalificacion } from "../services/calificacionesApi";
 import { eliminarCalificacion } from "../services/calificacionesApi";
-
+import { insertarCalificacionesPromedio } from "../services/calificacionesApi";
+import { existenPromedios } from "../services/calificacionesApi";
 
 
 export default function CalificacionesTab() {
@@ -17,6 +18,9 @@ export default function CalificacionesTab() {
   const [editando, setEditando] = useState<CalificacionTot | null>(null);
   const [mostrarModal, setMostrarModal] = useState(false);
   const [puntajeEditado, setPuntajeEditado] = useState("");
+  const [mostrarModalRecalcular, setMostrarModalRecalcular] = useState(false);
+  const [procesandoPromedios, setProcesandoPromedios] = useState(false);
+
 
 
   /* Filtros por Columna (Cabecera de la Tabla) */
@@ -140,6 +144,29 @@ export default function CalificacionesTab() {
       )
     );
   };
+
+  /****************************************************************************
+  * Función para calcular promedio de calificaciones por participante y jurado
+   ****************************************************************************/
+  const generarPromedios = async () => {
+    try {
+      const { existen } = await existenPromedios();
+
+      if (existen) {
+        //const confirmar = window.confirm("Los promedios ya existen. ¿Desea recalcular?");    
+        //if (!confirmar) return;
+        setMostrarModalRecalcular(true);
+        return;
+      }
+      await insertarCalificacionesPromedio();
+      alert("Promedios calculados correctamente");
+      
+    } catch (error) {
+        console.error(error);
+        alert("Error generando promedios");
+    }
+  };
+
   /*********************************************
   * Estilos para los campos del formulario
    *********************************************/
@@ -218,7 +245,8 @@ export default function CalificacionesTab() {
   };
 
   const btnCancelarStyle: React.CSSProperties = {
-    background: "#E5E7EB",
+    background: "#2563EB",
+    color: "white",
     padding: "6px 12px",
     borderRadius: 6,
     border: "none",
@@ -428,7 +456,7 @@ export default function CalificacionesTab() {
                                 }}
                         >
                           <button 
-                            style={{background: "#2365EC", 
+                            style={{background: "#007bff", 
                                     border: "1px solid #59636eff", 
                                     color: "#100dccff", 
                                     borderRadius: 6, 
@@ -442,7 +470,7 @@ export default function CalificacionesTab() {
                             onClick={() => deleteCalificacion(c)}
                             title="Eliminar"
                             style={{
-                              background: "#2365EC",
+                              background: "#007bff",
                               border: "none",
                               color: "white",
                               borderRadius: 6,
@@ -518,6 +546,61 @@ export default function CalificacionesTab() {
               </div>
             </div>
           )}
-    </div>
+
+          {mostrarModalRecalcular && (
+            <div style={overlayStyle}>
+              <div style={modalStyle}>
+                <h3>Recalcular promedios</h3>
+
+                <p>
+                  Los promedios ya existen.
+                  <br />
+                  ¿Desea recalcular? Esto eliminará los valores actuales.
+                </p>
+
+                <div style={{ display: "flex", justifyContent: "flex-end", gap: "10px" }}>
+                  <button
+                    onClick={() => setMostrarModalRecalcular(false)}
+                    style={btnCancelarStyle}
+                    disabled={procesandoPromedios}
+                  >
+                    Cancelar
+                  </button>
+
+                  <button
+                    onClick={() => {insertarCalificacionesPromedio()
+                                    setMostrarModalRecalcular(false);
+                    }}
+                    style={btnGuardarStyle}
+                    disabled={procesandoPromedios}
+                  >
+                    {procesandoPromedios ? "Procesando..." : "Recalcular"}
+                  </button>
+                </div>
+              </div>
+            </div>
+          )}
+
+
+        <div style={{ marginTop: 15, textAlign: "center" }}>
+          <button
+            onClick={generarPromedios}
+            style={{
+              background: "#007bff",
+              color: "white",
+              padding: "12px 16px",
+              borderRadius: 8,
+              border: "none",
+              fontSize: "0.85rem",
+              cursor: "pointer",
+              boxShadow: "0 4px 12px rgba(37,99,235,0.35)",
+              transition: "all 0.2s",
+            }}
+          >
+            📊 Generar Promedios
+          </button>
+        </div>
+  
+    </div>    
   );
 }

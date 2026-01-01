@@ -1,7 +1,6 @@
 CREATE TABLE public.calificaciones_promedio
 (
     id SERIAL PRIMARY KEY,
-	cedula_jurado character varying(20) NOT NULL,
 	cedula_participan character varying(20) NOT NULL,
     evento_id integer NOT NULL,
     categoria_id integer NOT NULL,
@@ -10,12 +9,7 @@ CREATE TABLE public.calificaciones_promedio
     fecha_actualizacion timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
 
     CONSTRAINT uq_calificaciones_promedio
-        UNIQUE (cedula_jurado, cedula_participan, evento_id, categoria_id),	
-
-    CONSTRAINT fk_cedula_jurado_calificaciones_prom
-        FOREIGN KEY (cedula_jurado)
-        REFERENCES public.jurados (cedula)
-        ON DELETE CASCADE,		
+        UNIQUE (cedula_participan, evento_id, categoria_id),	
 
     CONSTRAINT fk_cedula_participan_calificaciones_prom
         FOREIGN KEY (cedula_participan)

@@ -176,3 +176,30 @@ AND   p.cedula = c.cedula_participan;
    
 
 select * from calificaciones where cedula_participan = '16780919'
+
+
+select * from calificaciones_promedio --where evento_id = '20'
+
+delete from calificaciones_promedio
+
+INSERT INTO calificaciones_promedio (
+                        cedula_jurado,                        
+                        cedula_participan,                        
+                        evento_id,
+                        categoria_id,
+                        promedio
+                    )
+                    VALUES ('66458957','16780919','19','2','7.9')
+
+SELECT 
+   cedula_participan,                        
+   evento_id,
+   categoria_id,
+   ROUND(AVG(puntaje),2) AS promedio
+FROM calificaciones
+GROUP BY cedula_participan,                        
+         evento_id,
+         categoria_id					
+
+DROP TABLE IF EXISTS calificaciones_promedio CASCADE;
+		 
