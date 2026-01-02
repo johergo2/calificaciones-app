@@ -3,15 +3,6 @@ import { useNavigate } from "react-router-dom";
 export default function MenuPage() {
   const navigate = useNavigate();
 
-const cerrarSesion = () => {
-  // Elimina datos de autenticación
-  localStorage.removeItem("token");
-  localStorage.removeItem("usuario");
-
-  // Redirige al login
-  navigate("/", { replace: true });
-};
-
 
   return (
     <div
@@ -26,39 +17,40 @@ const cerrarSesion = () => {
       }}
     >
       <div
-      style={{
-        width: "100%",
-        maxWidth: 1020,
-        background: "#ebeef0ff",
-        borderRadius: 12,
-        padding: 28,
-        boxShadow: "0 6px 24px rgba(0,0,0,0.08)",
-        borderColor: "#8cbbf8ff",
-        borderWidth: "1px",
-        borderStyle: "solid",
-        textAlign: "center",
-      }}
+        style={{
+          width: "100%",
+          maxWidth: 1020,
+          background: "#ebeef0ff",
+          borderRadius: 12,
+          padding: 28,
+          boxShadow: "0 6px 24px rgba(0,0,0,0.08)",
+          borderColor: "#8cbbf8ff",
+          borderWidth: "1px",
+          borderStyle: "solid",
+          textAlign: "center",
+          display: "grid",
+        }}
       >
 
         <div style={{ display: "flex", justifyContent: "flex-end" }}>
           <button
-            onClick={cerrarSesion}
+            onClick={() => navigate("/menu")}
             style={{
               position: "absolute",
-              top: 185,
+              top: 205,
               right: 180,
               background: "#007bff",
               color: "white",
-              padding: "6px 22px",
+              padding: "6px 32px",
               borderRadius: 8,
               border: "none",
               cursor: "pointer",
               fontWeight: 600,
               fontSize: "0.8rem",
-              zIndex: 10,
+              //zIndex: 10,
             }}
           >
-            Cerrar sesión
+            ⬅ Regresar
           </button>
         </div>
 
@@ -68,39 +60,39 @@ const cerrarSesion = () => {
           style={{
             fontSize: "1.8rem",
             fontWeight: "bold",
-            marginTop: "20px",
+            marginTop: "10px",
             marginBottom: "10px",
             color: "#333",
           }}
         >
-          Sistema Calificación Concursantes
+          🏅 Menú Calificaciones
         </h1>
 
-        <h2 style={{ marginBottom: 30 }}>🏆 Menú Principal</h2>
+        <h2 style={{ marginBottom: 30 }}>Gestionar Calificaciones</h2>
 
         <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
 
          {/*BOTONES DEL MENU*/}
          <button
-           onClick={() => navigate("/DatosBasicos")}
+           onClick={() => navigate("/calificaciones")}
            style={botonEstilo}
          >
-           Datos Básicos
-         </button>     
-
-         <button
-           onClick={() => navigate("/EstructuraEventos")}
-           style={botonEstilo}
-         >
-           Estructurar Evento
-         </button>   
-
-         <button
-           onClick={() => navigate("/MenuCalificacionesPage")}
-           style={botonEstilo}
-         >
-           Calificaciones
+           Calificar Participante
          </button>
+
+         <button
+           onClick={() => navigate("/ConsultaCalificaciones")}
+           style={botonEstilo}
+         >
+           Consultar Calificaciones
+         </button> 
+
+         <button
+           onClick={() => navigate("/CalificacionesRanking")}
+           style={botonEstilo}
+         >
+           Calificaciones Ranking
+         </button>          
                 
         </div>
       </div>

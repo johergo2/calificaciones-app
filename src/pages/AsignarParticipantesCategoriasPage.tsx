@@ -253,22 +253,23 @@ const tdStyle: React.CSSProperties = {
       )}
 
       <h2 style={{ textAlign: "center", color: "#1E40AF", fontWeight: 700, letterSpacing: "0.5PX" }}>
-        ASIGNAR PARTICIPANTES A EVENTOS Y CATEGORÍAS
+        👫 ASIGNAR PARTICIPANTES A EVENTOS Y CATEGORÍAS
       </h2>
 
       <div style={{ display: "flex", justifyContent: "flex-end" }}>
-        <button onClick={() => navigate("/menu")}
+        <button onClick={() => navigate("/EstructuraEventos")}
                   style={{
                     background: "#007bff",
                     color: "white",
-                    fontSize: "0.6rem",
+                    fontSize: "0.75rem",
                     //height: "15px",
+                    padding: "8px 32px",
                     cursor: "pointer",
                     boxShadow: "0 4px 12px rgba(37,99,235,0.35)",
                     transition: "all 0.2s",
                   }}                    
         >          
-          ⬅ Volver al Menú</button>
+          ⬅ Regresar</button>
       </div>
 
       {/* ===============================

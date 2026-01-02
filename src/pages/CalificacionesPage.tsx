@@ -309,23 +309,23 @@ export default function CalificacionesPage() {
       )}
 
       <h2 style={{ textAlign: "center", color: "#1E40AF", fontWeight: 700, letterSpacing: "0.5PX" }}>
-        CALIFICAR PARTICIPANTES
+        👑 CALIFICAR PARTICIPANTES
       </h2>
 
       <div style={{ display: "flex", justifyContent: "flex-end" }}>
-        <button onClick={() => navigate("/menu")}
+        <button onClick={() => navigate("/MenuCalificacionesPage")}
                   style={{
                     background: "#007bff",
                     color: "white",
                     fontSize: "0.75rem",
-                    padding: "6px 12px",
+                    padding: "6px 32px",
                     //height: "15px",
                     cursor: "pointer",
                     boxShadow: "0 4px 12px rgba(37,99,235,0.35)",
                     transition: "all 0.2s",
                   }}                    
         >          
-          ⬅ Volver al Menú</button>
+          ⬅ Regresar</button>
       </div>
 
       {/* ===============================

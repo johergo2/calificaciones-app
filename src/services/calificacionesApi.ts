@@ -27,9 +27,21 @@ export interface CalificacionTot {
   puntaje: number;
 }
 
+export interface CalificacionRanking {
+  id: number;
+  evento_id: string,
+  evento: string;
+  categoria_id: string,
+  categoria: string;
+  cedula_participan: string,
+  participante: string;
+  promedio: number;
+}
+
 export interface CalificacionTotResponse {calificacionestot: CalificacionTot[]}
 
 export interface CalificacionTabResponse {calificacionestot: CalificacionTot[]}
+export interface CalificacionRankingResponse {calificacionesranking: CalificacionRanking[]}
 
 // Obtener todas las calificaciones
 export const getCalificaciones = async (eventoId?: number) => {  
@@ -54,6 +66,14 @@ export const getCalificacionestab = async (): Promise<CalificacionTot[]> => {
   const response = await axios.get<CalificacionTabResponse>(`${API_URL}/calificacionestot`);
   return response.data.calificacionestot;
 };
+
+
+// Obtener todas las calificaciones promedio ordenadas descendente para ver ganadores del evento
+export const getCalificacionesranking = async (): Promise<CalificacionRanking[]> => {  
+  const response = await axios.get<CalificacionRankingResponse>(`${API_URL}/calificacionesranking`);
+  return response.data.calificacionesranking;
+};
+
 
 // Crear calificacion
 export const crearCalificacion = async (data: {

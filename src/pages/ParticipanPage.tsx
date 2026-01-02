@@ -172,25 +172,27 @@ const botonCerrarStyle: React.CSSProperties = {
 
   return (
     <div style={{ width: "90vw", padding: 20, background: "#f1f5f9", minHeight: "100vh" }}>
-      <h2 style={{ textAlign: "center", color: "#1E40AF", fontWeight: 700, letterSpacing: "0.5PX" }}>GESTIONAR PARTICIPANTES</h2>
+      <h2 style={{ textAlign: "center", color: "#1E40AF", 
+                   fontWeight: 700, letterSpacing: "0.5PX" 
+                  }}>🧑‍🤝‍🧑 GESTIONAR PARTICIPANTES</h2>
 
       {/* Botón regresar al menú */}
       <div style={{ width: "100%", display: "flex", justifyContent: "flex-end", marginBottom: "10px" }}>
         <button
-          onClick={() => navigate("/menu")}
+          onClick={() => navigate("/DatosBasicos")}
           style={{
-            padding: "8px 16px",
+            padding: "8px 32px",
             background: "#007bff",
             color: "white",
             border: "none",
             borderRadius: "8px",
             cursor: "pointer",
             fontWeight: "bold",
-            fontSize: "0.6rem",
+            fontSize: "0.7rem",
             alignItems: "rigth",
           }}
         >
-          ⬅ Volver al Menú
+          ⬅ Regresar
         </button>
       </div>
 

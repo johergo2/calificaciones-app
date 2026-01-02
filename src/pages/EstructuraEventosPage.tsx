@@ -3,15 +3,6 @@ import { useNavigate } from "react-router-dom";
 export default function MenuPage() {
   const navigate = useNavigate();
 
-const cerrarSesion = () => {
-  // Elimina datos de autenticación
-  localStorage.removeItem("token");
-  localStorage.removeItem("usuario");
-
-  // Redirige al login
-  navigate("/", { replace: true });
-};
-
 
   return (
     <div
@@ -26,39 +17,40 @@ const cerrarSesion = () => {
       }}
     >
       <div
-      style={{
-        width: "100%",
-        maxWidth: 1020,
-        background: "#ebeef0ff",
-        borderRadius: 12,
-        padding: 28,
-        boxShadow: "0 6px 24px rgba(0,0,0,0.08)",
-        borderColor: "#8cbbf8ff",
-        borderWidth: "1px",
-        borderStyle: "solid",
-        textAlign: "center",
-      }}
+        style={{
+          width: "100%",
+          maxWidth: 1020,
+          background: "#ebeef0ff",
+          borderRadius: 12,
+          padding: 28,
+          boxShadow: "0 6px 24px rgba(0,0,0,0.08)",
+          borderColor: "#8cbbf8ff",
+          borderWidth: "1px",
+          borderStyle: "solid",
+          textAlign: "center",
+          display: "grid",
+        }}
       >
 
         <div style={{ display: "flex", justifyContent: "flex-end" }}>
           <button
-            onClick={cerrarSesion}
+            onClick={() => navigate("/menu")}
             style={{
               position: "absolute",
-              top: 185,
-              right: 180,
+              top: 180,
+              right: 170,
               background: "#007bff",
               color: "white",
-              padding: "6px 22px",
+              padding: "6px 32px",
               borderRadius: 8,
               border: "none",
               cursor: "pointer",
               fontWeight: 600,
               fontSize: "0.8rem",
-              zIndex: 10,
+              //zIndex: 10,
             }}
           >
-            Cerrar sesión
+            ⬅ Regresar
           </button>
         </div>
 
@@ -68,38 +60,38 @@ const cerrarSesion = () => {
           style={{
             fontSize: "1.8rem",
             fontWeight: "bold",
-            marginTop: "20px",
+            marginTop: "10px",
             marginBottom: "10px",
             color: "#333",
           }}
         >
-          Sistema Calificación Concursantes
+          🛠️ Estructurar Evento
         </h1>
 
-        <h2 style={{ marginBottom: 30 }}>🏆 Menú Principal</h2>
+        <h2 style={{ marginBottom: 30 }}>Asignar categorias, participantes y jurados</h2>
 
         <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
 
          {/*BOTONES DEL MENU*/}
          <button
-           onClick={() => navigate("/DatosBasicos")}
+           onClick={() => navigate("/asignarcategorias")}
            style={botonEstilo}
          >
-           Datos Básicos
-         </button>     
+          Asociar Categorias/Eventos
+         </button>
 
          <button
-           onClick={() => navigate("/EstructuraEventos")}
+           onClick={() => navigate("/asignarParticipantes")}
            style={botonEstilo}
          >
-           Estructurar Evento
-         </button>   
+           Asociar Participantes/Eventos/Categorias
+         </button>
 
          <button
-           onClick={() => navigate("/MenuCalificacionesPage")}
+           onClick={() => navigate("/asignarJurados")}
            style={botonEstilo}
          >
-           Calificaciones
+           Asociar Jurados/Eventos/Categorias
          </button>
                 
         </div>

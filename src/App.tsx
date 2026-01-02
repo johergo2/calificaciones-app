@@ -10,6 +10,10 @@ import JuradosPage from "./pages/JuradosPage";
 import AsignarJuradosPage from "./pages/AsignarJuradosCategoriasPage";
 import CalificacionesPage from "./pages/CalificacionesPage";
 import CalificacionesTab from "./pages/CalificacionesTab";
+import DatosBasicosPage from "./pages/DatosBasicosPage";
+import EstructuraEventosPage from "./pages/EstructuraEventosPage";
+import MenuCalificacionesPage from "./pages/MenuCalificacionesPage";
+import CalificacionesRanking from "./pages/CalificacionesRanking";
 
 function App() {
   return (
@@ -26,6 +30,10 @@ function App() {
         <Route path="/asignarJurados" element={<AsignarJuradosPage />} />
         <Route path="/calificaciones" element={<CalificacionesPage />} />
         <Route path="/ConsultaCalificaciones" element={<CalificacionesTab />} />             
+        <Route path="/DatosBasicos" element={<DatosBasicosPage />} />   
+        <Route path="/EstructuraEventos" element={<EstructuraEventosPage />} />   
+        <Route path="/MenuCalificacionesPage" element={<MenuCalificacionesPage />} /> 
+        <Route path="/CalificacionesRanking" element={<CalificacionesRanking />} /> 
       </Routes>
     </BrowserRouter>
   );
