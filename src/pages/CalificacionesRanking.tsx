@@ -13,11 +13,8 @@ export default function CalificacionesRanking() {
 
   /* Estados */
   const [calificaciones, setCalificaciones] = useState<CalificacionRanking[]>([]);
-  const [editando, setEditando] = useState<CalificacionRanking | null>(null);
-  const [mostrarModal, setMostrarModal] = useState(false);
-  const [puntajeEditado, setPuntajeEditado] = useState("");
-  const [mostrarModalRecalcular, setMostrarModalRecalcular] = useState(false);
-  const [procesandoPromedios, setProcesandoPromedios] = useState(false);
+  const [setMostrarModalRecalcular] = useState(false);
+  
 
 
 
@@ -72,28 +69,6 @@ export default function CalificacionesRanking() {
           .map(v => String(v))
       )
     );
-  };
-
-  /****************************************************************************
-  * Función para calcular promedio de calificaciones por participante y jurado
-   ****************************************************************************/
-  const generarPromedios = async () => {
-    try {
-      const { existen } = await existenPromedios();
-
-      if (existen) {
-        //const confirmar = window.confirm("Los promedios ya existen. ¿Desea recalcular?");    
-        //if (!confirmar) return;
-        setMostrarModalRecalcular(true);
-        return;
-      }
-      await insertarCalificacionesPromedio();
-      alert("Promedios calculados correctamente");
-      
-    } catch (error) {
-        console.error(error);
-        alert("Error generando promedios");
-    }
   };
 
   /*********************************************
@@ -357,27 +332,7 @@ export default function CalificacionesRanking() {
                 )}
               </tbody>
             </table>          
-          </div>
-
-        <div style={{ marginTop: 15, textAlign: "center" }}>
-          <button
-            onClick={generarPromedios}
-            style={{
-              background: "#007bff",
-              color: "white",
-              padding: "12px 16px",
-              borderRadius: 8,
-              border: "none",
-              fontSize: "0.85rem",
-              cursor: "pointer",
-              boxShadow: "0 4px 12px rgba(37,99,235,0.35)",
-              transition: "all 0.2s",
-            }}
-          >
-            📊 Generar Promedios
-          </button>
-        </div>
-  
+          </div>  
     </div>    
   );
 }
