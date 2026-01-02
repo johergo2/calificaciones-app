@@ -19,7 +19,7 @@ export default function CalificacionesTab() {
   const [mostrarModal, setMostrarModal] = useState(false);
   const [puntajeEditado, setPuntajeEditado] = useState("");
   const [mostrarModalRecalcular, setMostrarModalRecalcular] = useState(false);
-  const [procesandoPromedios, setProcesandoPromedios] = useState(false);
+  const [procesandoPromedios] = useState(false);
 
 
 
