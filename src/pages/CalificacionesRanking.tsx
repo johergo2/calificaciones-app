@@ -4,19 +4,12 @@ import { useNavigate } from "react-router-dom";
 
 import type { CalificacionRanking } from "../services/calificacionesApi";
 import { getCalificacionesranking } from "../services/calificacionesApi";
-import { insertarCalificacionesPromedio } from "../services/calificacionesApi";
-import { existenPromedios } from "../services/calificacionesApi";
-
 
 export default function CalificacionesRanking() {
   const navigate = useNavigate();
 
   /* Estados */
   const [calificaciones, setCalificaciones] = useState<CalificacionRanking[]>([]);
-  const [setMostrarModalRecalcular] = useState(false);
-  
-
-
 
   /* Filtros por Columna (Cabecera de la Tabla) */
   const [filters, setFilters] = useState({
@@ -110,60 +103,6 @@ export default function CalificacionesRanking() {
     padding: "4px 6px",
     borderRadius: 4,
     border: "1px solid #CBD5E1",
-  };
-
-  const filterSelectStyle: React.CSSProperties = {
-    width: "100%",
-    fontSize: "0.75rem",
-    padding: "4px 6px",
-    borderRadius: 6,
-    border: "1px solid #CBD5E1",
-    background: "#FFFFFF",
-  };
-
-  const overlayStyle: React.CSSProperties = {
-    position: "fixed",
-    top: 0,
-    left: 0,
-    width: "100vw",
-    height: "100vh",
-    background: "rgba(0,0,0,0.5)",
-    display: "flex",
-    justifyContent: "center",
-    alignItems: "center",
-    zIndex: 999,
-  };
-
-  const modalStyle: React.CSSProperties = {
-    background: "#FFFFFF",
-    padding: 25,
-    borderRadius: 12,
-    width: 400,
-    boxShadow: "0 10px 30px rgba(0,0,0,0.2)",
-  };
-
-  const labelStyle: React.CSSProperties = {
-    fontSize: "0.8rem",
-    fontWeight: 600,
-    color: "#374151",
-  };
-
-  const btnCancelarStyle: React.CSSProperties = {
-    background: "#2563EB",
-    color: "white",
-    padding: "6px 12px",
-    borderRadius: 6,
-    border: "none",
-    cursor: "pointer",
-  };
-
-  const btnGuardarStyle: React.CSSProperties = {
-    background: "#2563EB",
-    color: "white",
-    padding: "6px 14px",
-    borderRadius: 6,
-    border: "none",
-    cursor: "pointer",
   };
 
 
