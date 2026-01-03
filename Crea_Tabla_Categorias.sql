@@ -180,7 +180,7 @@ select * from calificaciones where cedula_participan = '16780919'
 
 select * from calificaciones_promedio --where evento_id = '20'
 
-delete from calificaciones_promedio
+--delete from calificaciones_promedio
 
 INSERT INTO calificaciones_promedio (
                         cedula_jurado,                        
@@ -201,5 +201,59 @@ GROUP BY cedula_participan,
          evento_id,
          categoria_id					
 
-DROP TABLE IF EXISTS calificaciones_promedio CASCADE;
-		 
+--DROP TABLE IF EXISTS calificaciones_promedio CASCADE;
+
+
+
+SELECT
+c.id,
+e.id            AS evento_id,
+e.nombre        AS evento,
+cat.id          AS categoria_id,
+cat.categoria   AS categoria,
+p.cedula        AS cedula_participan,
+p.nombre        AS participante,
+c.promedio
+FROM calificaciones_promedio c, eventos e, categorias cat, participantes p
+WHERE e.id = c.evento_id
+AND   cat.id = c.categoria_id
+AND   p.cedula = c.cedula_participan
+ORDER BY e.id, cat.id, c.promedio desc
+
+
+                    SELECT
+                        c.id,
+                        c.categoria
+                    FROM eventos_categorias ec
+                    JOIN categorias c ON c.id = ec.categoria_id
+                    INNER JOIN usuarios_eventos ue
+                       ON ue.evento_id = ec.evento_id
+                    WHERE ec.evento_id = 19
+                    AND   ue.usuario_id = 1
+                    ORDER BY c.categoria
+
+select * FROM eventos_categorias --ec.categoria_id		 
+
+select * FROM categorias  c.id
+
+select * FROM usuarios_eventos --ue.evento_id ec.evento_id
+
+INSERT INTO usuarios_eventos (usuario_id, evento_id, rol)
+VALUES ('2','19','Participante')
+
+        SELECT
+            pce.id,
+            pce.cedula,
+            p.nombre AS participante,
+            pce.evento_id,
+            e.nombre AS evento,
+            pce.categoria_id,
+            c.categoria,
+            pce.fecha_creacion
+        FROM participantes_categorias_eventos pce
+        JOIN participantes p ON p.cedula = pce.cedula
+        JOIN eventos e ON e.id = pce.evento_id
+        JOIN categorias c ON c.id = pce.categoria_id
+		JOIN usuarios_eventos ue ON ue.evento_id = e.id
+        WHERE ue.usuario_id = 2
+		

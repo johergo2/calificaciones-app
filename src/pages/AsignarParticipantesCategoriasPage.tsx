@@ -61,8 +61,12 @@ export default function AsignarParticipantesCategoriasPage() {
   const [categoriasSeleccionadas, setCategoriasSeleccionadas] = useState<number[]>([]);
 
 //  const [mensajeOk, setMensajeOk] = useState("");
-const [mostrarPopup, setMostrarPopup] = useState(false);
-const [popupMensaje, setPopupMensaje] = useState("");
+  const [mostrarPopup, setMostrarPopup] = useState(false);
+  const [popupMensaje, setPopupMensaje] = useState("");
+
+  // Obtener usuario que inicia sesión
+  const usuarioId = Number(localStorage.getItem("usuarioId"));
+  console.log("usuarioId:", usuarioId);
 
 
   /* ===============================
@@ -78,12 +82,12 @@ const [popupMensaje, setPopupMensaje] = useState("");
   useEffect(() => {
     cargarDatos();
     //cargarTabla();
-    cargarTabla(eventoFiltroId === "" ? undefined : eventoFiltroId);
+    cargarTabla(eventoFiltroId === "" ? undefined : eventoFiltroId, usuarioId);
   }, [eventoFiltroId]);
 
   const cargarDatos = async () => {
     setParticipantes(await getParticipantes());
-    setEventos(await getEventos());
+    setEventos(await getEventos(usuarioId));
     setCategorias(await getCategorias());
   };
 
@@ -136,7 +140,8 @@ const [popupMensaje, setPopupMensaje] = useState("");
       setPopupMensaje("✔️ Participantes(s) asignados correctamente");
       setMostrarPopup(true);
 
-      cargarTabla(eventoFiltroId || undefined);
+      cargarTabla(eventoFiltroId ? Number(eventoFiltroId) : undefined,
+                  usuarioId);
 
     } catch (error) {
       setPopupMensaje("❌ Error al asignar Participantes");
@@ -148,10 +153,15 @@ const [popupMensaje, setPopupMensaje] = useState("");
   /* ===============================
      Tabla
   ================================ */
-  const cargarTabla = async (eventoId?: number) => {
+  const cargarTabla = async (eventoId?: number, usuarioId?: number) => {
     try {
       setLoadingTabla(true);
-      const data = await getParticipantesCategoriasEventos(eventoId);
+
+      const data = await getParticipantesCategoriasEventos({  
+        eventoId,
+        usuarioId
+      });
+
       console.log("TABLA BACKEND →", data);
       setTabla(data);
     } finally {
@@ -170,7 +180,8 @@ const [popupMensaje, setPopupMensaje] = useState("");
     if (!confirm("¿Eliminar esta asignación?")) return;
 
     await eliminarCategoriaParticipante(cedula, eventoId, categoriaId);
-    cargarTabla(eventoFiltroId || undefined);
+    cargarTabla(eventoFiltroId ? Number(eventoFiltroId) : undefined,
+                usuarioId);
     cargarCategoriasAsignadas();
   };
 
@@ -390,7 +401,8 @@ const tdStyle: React.CSSProperties = {
         if (eventoFiltroId === ""){
           cargarTabla();
         } else{
-          cargarTabla(eventoFiltroId);
+          cargarTabla(eventoFiltroId ? Number(eventoFiltroId) : undefined,
+                      usuarioId);
         }
       }}
             style={{ 

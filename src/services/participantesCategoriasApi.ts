@@ -1,4 +1,5 @@
 import axios from "axios";
+import { data } from "react-router-dom";
 
 const API_URL = "https://api-usuarios-f1im.onrender.com/api";
 
@@ -23,13 +24,18 @@ export interface ParticipanteCategoriaEvento {
 ===================================================== */
 
 export const getParticipantesCategoriasEventos = async (
-  eventoId?: number,
-  cedula?: string
-): Promise<ParticipanteCategoriaEvento[]> => {
+    filtros: {
+    eventoId?: number;
+    cedula?: string;
+    usuarioId?: number;
+  }
+) => {
 
-  const params: Record<string, any> = {};
-  if (eventoId) params.evento_id = eventoId;
-  if (cedula) params.cedula = cedula;
+  const params: any = {};
+
+  if (filtros.eventoId) params.evento_id = filtros.eventoId;
+  if (filtros.cedula) params.cedula = filtros.cedula;
+  if (filtros.usuarioId) params.usuario_id = filtros.usuarioId;
 
   const response = await axios.get(
     `${API_URL}/participantes-categorias-eventos`,
@@ -37,8 +43,8 @@ export const getParticipantesCategoriasEventos = async (
   );
 
   // 🔒 Normalización de respuesta (CLAVE)
-  if (Array.isArray(response.data)) {
-    return response.data;
+  if (Array.isArray(response.data?.data)) {
+    return response.data.data;
   }
 
   if (Array.isArray(response.data.data)) {
