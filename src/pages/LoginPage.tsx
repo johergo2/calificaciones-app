@@ -24,17 +24,19 @@ export default function LoginPage() {
     //setDebugData(usuario);
 
     if (!usuario) {
+      setLoading(false);
       setError("Usuario no encontrado o inactivo LoginPage.tsx");
       return;
     }
 
     if (usuario.contrasena === contrasena) {
+      localStorage.setItem("usuarioId", String(usuario.id));
       setMensaje(`Bienvenido ${usuario.nombre}`);
 
       // Esperar 3 segundos antes de pasar al menú (opcional)
       setTimeout(() => {
         navigate("/menu"); // 👈 redirige a la página de eventos
-      }, 3000);      
+      }, 3000);          
     
     } else {
       setLoading(false);

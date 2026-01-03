@@ -15,12 +15,12 @@ export interface Evento {
 }
 
 // Obtener todos los eventos
-export const getEventos = async (): Promise<Evento[]> => {
+export const getEventos = async (usuarioId: number): Promise<Evento[]> => {
   try {
-    const response = await axios.get(`${API_URL}/eventos`);
+    const response = await axios.get(`${API_URL}/eventos`, {params: {usuario_id: usuarioId}});
     return response.data.eventos;    
-  } catch {
-    console.error("Error cargando eventos");
+  } catch (error) {
+    console.error("Error cargando eventos", error);
     return [];
   }
 

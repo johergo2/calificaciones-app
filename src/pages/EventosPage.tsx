@@ -31,11 +31,18 @@ export default function EventosPage() {
   const [mostrarPopup, setMostrarPopup] = useState(false);
   const [popupMensaje, setPopupMensaje] = useState("");
 
+  const usuarioId = Number(localStorage.getItem("usuarioId"));
+  console.log("usuarioId:", usuarioId);
+
   const navigate = useNavigate();
 
 
   const cargarEventos = async () => {
-    const data = await getEventos();
+    if (!usuarioId) {
+      console.error("Usuario no autenticado");
+      return;
+    }
+    const data = await getEventos(usuarioId);
     setEventos(data);
   };
 
