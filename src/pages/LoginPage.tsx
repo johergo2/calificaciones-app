@@ -30,7 +30,7 @@ export default function LoginPage() {
     }
 
     if (usuario.contrasena === contrasena) {
-      localStorage.setItem("usuarioId", String(usuario.id));
+      localStorage.setItem("usuarioId", String(usuario.id)); //Captura usuario
       setMensaje(`Bienvenido ${usuario.nombre}`);
 
       // Esperar 3 segundos antes de pasar al menú (opcional)

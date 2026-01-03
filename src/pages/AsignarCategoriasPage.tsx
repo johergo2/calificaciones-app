@@ -33,6 +33,8 @@ export default function AsignarCategoriasPage() {
   const [categorias, setCategorias] = useState<Categoria[]>([]);
   const [eventoId, setEventoId] = useState<number | "">("");
   const [categoriasSeleccionadas, setCategoriasSeleccionadas] = useState<number[]>([]);
+  const usuarioId = Number(localStorage.getItem("usuarioId"));
+  console.log("usuarioId:", usuarioId);
 
   //Mostrar popup al guardar
   //const [mensajeOk, setMensajeOk] = useState("");
@@ -48,13 +50,17 @@ export default function AsignarCategoriasPage() {
      Cargar eventos y categorías
 ================================ */
   useEffect(() => {
-    cargarEventos();
+    cargarEventos(usuarioId);
     cargarCategorias();
   }, []);
 
-  const cargarEventos = async () => {
+  const cargarEventos = async (usuarioId: number) => {
     try {
-      const res = await fetch(`${API_URL}/eventos`);
+      const res = await fetch(`${API_URL}/eventos?usuario_id=${usuarioId}`);
+      
+      if (!res.ok) {
+        throw new Error("Error en la respuesta del servidor");
+      }
       const data = await res.json();
 
        console.log("RESPUESTA EVENTOS:", data); // 👈 AGREGA ESTO
@@ -163,7 +169,7 @@ export default function AsignarCategoriasPage() {
 
   /* ===============================
      Tabla inferior
-================================ */
+  ================================ */
   const cargarTablaEventoCategorias = async (eventoId?: number) => {
     try {
       setLoadingTabla(true);
@@ -176,7 +182,13 @@ export default function AsignarCategoriasPage() {
       const filas: EventoCategoria[] = [];
 
       for (const evento of eventosFiltrados) {
-        const res = await fetch(`${API_URL}/eventos/${evento.id}/categorias`);
+        const res = await fetch(`${API_URL}/eventos/${evento.id}/categorias?usuario_id=${usuarioId}`);
+
+        if (!res.ok) {
+          console.error("Error consultando categorías del evento", evento.id);
+          continue;
+        }
+
         const data = await res.json();
 
         (data.categorias || []).forEach((c: Categoria) => {
