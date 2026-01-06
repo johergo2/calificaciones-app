@@ -33,13 +33,18 @@ export default function AsignarCategoriasPage() {
   const [categorias, setCategorias] = useState<Categoria[]>([]);
   const [eventoId, setEventoId] = useState<number | "">("");
   const [categoriasSeleccionadas, setCategoriasSeleccionadas] = useState<number[]>([]);
-  const usuarioId = Number(localStorage.getItem("usuarioId"));
-  console.log("usuarioId:", usuarioId);
+
 
   //Mostrar popup al guardar
   //const [mensajeOk, setMensajeOk] = useState("");
   const [mostrarPopup, setMostrarPopup] = useState(false);
   const [popupMensaje, setPopupMensaje] = useState("");
+
+  // Usuario que inicia sesión viene de LoginPage.tsx
+  const usuarioId = Number(localStorage.getItem("usuarioId"));
+  const usuarioNombre = localStorage.getItem("usuarioNombre") ?? "Usuario";  
+  console.log("usuarioId:", usuarioId);
+  console.log("usuarioNombre:", usuarioNombre); 
 
   /* Tabla inferior */
   const [tablaEventoCategorias, setTablaEventoCategorias] = useState<EventoCategoria[]>([]);
@@ -288,7 +293,25 @@ const botonCerrarStyle: React.CSSProperties = {
 
       <h2 style={{ textAlign: "center", color: "#1E40AF", fontWeight: 700, 
                    letterSpacing: "0.5PX" 
-                  }}>🧩 ASIGNAR CATEGORÍAS A EVENTOS</h2>
+                  }}>🧩 ASIGNAR CATEGORÍAS A EVENTOS
+      </h2>
+
+      <div
+        style={{
+          position: "absolute",
+          top: 45,
+          left: 35,
+          fontWeight: 600,
+          fontSize: "0.75rem",
+          fontStyle: "italic",
+          color: "#1E40AF",
+          display: "flex",
+          alignItems: "center",
+          gap: 8,
+        }}
+      >
+        👤 {usuarioNombre}
+      </div>
 
       <div style={{ display: "flex", justifyContent: "flex-end" }}>
        <button onClick={() => navigate("/EstructuraEventos")}

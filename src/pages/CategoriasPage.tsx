@@ -16,6 +16,10 @@ export default function CategoriasPage() {
   const [categorias, setCategorias] = useState<Categorias[]>([]);
   const [editando, setEditando] = useState<Categorias | null>(null);
 
+ // Usuario que inicia sesión viene de LoginPage.tsx
+  const usuarioNombre = localStorage.getItem("usuarioNombre") ?? "Usuario";
+  console.log("usuarioNombre:", usuarioNombre);  
+
   const [formData, setFormData] = useState<CategoriaForm>({
     categoria: "",    
   });
@@ -156,7 +160,25 @@ const botonCerrarStyle: React.CSSProperties = {
     <div style={{ width: "90vw", padding: 20, background: "#f1f5f9", minHeight: "100vh" }}>
       <h2 style={{ textAlign: "center", color: "#1E40AF", 
                    fontWeight: 700, letterSpacing: "0.5PX" 
-                  }}>🏷️ GESTIONAR CATEGORÍAS</h2>
+                  }}>🏷️ GESTIONAR CATEGORÍAS
+      </h2>
+
+      <div
+        style={{
+          position: "absolute",
+          top: 45,
+          left: 45,
+          fontWeight: 600,
+          fontSize: "0.75rem",
+          fontStyle: "italic",
+          color: "#1E40AF",
+          display: "flex",
+          alignItems: "center",
+          gap: 8,
+        }}
+      >
+        👤 {usuarioNombre}
+      </div>
 
       {/* Botón regresar al menú */}
       <div style={{ width: "100%", display: "flex", justifyContent: "flex-end", marginBottom: "10px" }}>

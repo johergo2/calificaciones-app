@@ -239,7 +239,7 @@ select * FROM categorias  c.id
 select * FROM usuarios_eventos --ue.evento_id ec.evento_id
 
 INSERT INTO usuarios_eventos (usuario_id, evento_id, rol)
-VALUES ('2','19','Participante')
+VALUES ('2','23','Participante')
 
         SELECT
             pce.id,
@@ -256,4 +256,83 @@ VALUES ('2','19','Participante')
         JOIN categorias c ON c.id = pce.categoria_id
 		JOIN usuarios_eventos ue ON ue.evento_id = e.id
         WHERE ue.usuario_id = 2
-		
+
+
+        SELECT
+            pce.id,
+            pce.cedula,
+            p.nombre AS jurado,
+            pce.evento_id,
+            e.nombre AS evento,
+            pce.categoria_id,
+            c.categoria,
+            pce.fecha_creacion
+        FROM jurados_categorias_eventos pce
+        JOIN jurados p ON p.cedula = pce.cedula
+        JOIN eventos e ON e.id = pce.evento_id
+        JOIN categorias c ON c.id = pce.categoria_id
+		JOIN usuarios_eventos ue ON ue.evento_id = e.id
+        WHERE 1=1		
+		AND pce.evento_id = '20'
+		AND pce.cedula = '16444232'
+		AND ue.usuario_id = 1
+		ORDER BY pce.evento_id, pce.categoria_id, pce.cedula
+
+                  SELECT 
+                      c.id,
+                      c.cedula_jurado,
+                      c.cedula_participan,
+                      c.evento_id,
+                      c.categoria_id,
+                      c.puntaje
+                  FROM calificaciones c
+				  JOIN usuarios_eventos ue ON ue.evento_id = c.evento_id
+				  AND  ue.usuario_id = 2
+                  ORDER BY c.evento_id,	c.categoria_id, c.cedula_participan, c.cedula_jurado
+
+
+
+
+                    SELECT
+                    c.id,
+                    j.cedula        AS cedula_jurado,
+                    j.nombre        AS jurado,
+                    e.id            AS evento_id,
+                    e.nombre        AS evento,
+                    cat.id          AS categoria_id,
+                    cat.categoria   AS categoria,
+                    p.cedula        AS cedula_participan,
+                    p.nombre        AS participante,
+                    c.puntaje
+                    FROM calificaciones c, jurados j, eventos e, categorias cat, participantes p, usuarios_eventos ue
+                    WHERE j.cedula = c.cedula_jurado
+                    AND   e.id = c.evento_id
+                    AND   cat.id = c.categoria_id
+                    AND   p.cedula = c.cedula_participan 
+					AND   ue.evento_id = c.evento_id
+					AND   ue.usuario_id = 1
+					AND   j.cedula = '16444232'
+
+
+                SELECT
+                c.id,
+                e.id            AS evento_id,
+                e.nombre        AS evento,
+                cat.id          AS categoria_id,
+                cat.categoria   AS categoria,
+                p.cedula        AS cedula_participan,
+                p.nombre        AS participante,
+                c.promedio
+                FROM calificaciones_promedio c, eventos e, categorias cat, participantes p
+                WHERE e.id = c.evento_id
+                AND   cat.id = c.categoria_id
+                AND   p.cedula = c.cedula_participan 
+				AND e.id = '20'
+	            AND EXISTS (
+	                SELECT 1
+	                FROM usuarios_eventos ue
+	                WHERE ue.evento_id = e.id
+	                AND ue.usuario_id = 1	)			
+				ORDER BY e.id, cat.id, c.promedio desc
+
+select * from jurados_categorias_eventos				

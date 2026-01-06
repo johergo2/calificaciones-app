@@ -64,9 +64,11 @@ export default function AsignarParticipantesCategoriasPage() {
   const [mostrarPopup, setMostrarPopup] = useState(false);
   const [popupMensaje, setPopupMensaje] = useState("");
 
-  // Obtener usuario que inicia sesión
+  // Usuario que inicia sesión viene de LoginPage.tsx
   const usuarioId = Number(localStorage.getItem("usuarioId"));
   console.log("usuarioId:", usuarioId);
+  const usuarioNombre = localStorage.getItem("usuarioNombre") ?? "Usuario";  
+  console.log("usuarioNombre:", usuarioNombre); 
 
 
   /* ===============================
@@ -266,6 +268,23 @@ const tdStyle: React.CSSProperties = {
       <h2 style={{ textAlign: "center", color: "#1E40AF", fontWeight: 700, letterSpacing: "0.5PX" }}>
         👫 ASIGNAR PARTICIPANTES A EVENTOS Y CATEGORÍAS
       </h2>
+
+      <div
+        style={{
+          position: "absolute",
+          top: 45,
+          left: 35,
+          fontWeight: 600,
+          fontSize: "0.75rem",
+          fontStyle: "italic",
+          color: "#1E40AF",
+          display: "flex",
+          alignItems: "center",
+          gap: 8,
+        }}
+      >
+        👤 {usuarioNombre}
+      </div>
 
       <div style={{ display: "flex", justifyContent: "flex-end" }}>
         <button onClick={() => navigate("/EstructuraEventos")}

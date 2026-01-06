@@ -29,6 +29,10 @@ export default function ParticipanPage() {
   const [mostrarPopup, setMostrarPopup] = useState(false);
   const [popupMensaje, setPopupMensaje] = useState("");
 
+  // Usuario que inicia sesión viene de LoginPage.tsx
+  const usuarioNombre = localStorage.getItem("usuarioNombre") ?? "Usuario";
+  console.log("usuarioNombre:", usuarioNombre);  
+
   const navigate = useNavigate();
 
 
@@ -174,7 +178,25 @@ const botonCerrarStyle: React.CSSProperties = {
     <div style={{ width: "90vw", padding: 20, background: "#f1f5f9", minHeight: "100vh" }}>
       <h2 style={{ textAlign: "center", color: "#1E40AF", 
                    fontWeight: 700, letterSpacing: "0.5PX" 
-                  }}>🧑‍🤝‍🧑 GESTIONAR PARTICIPANTES</h2>
+                  }}>🧑‍🤝‍🧑 GESTIONAR PARTICIPANTES
+      </h2>
+
+      <div
+        style={{
+          position: "absolute",
+          top: 45,
+          left: 35,
+          fontWeight: 600,
+          fontSize: "0.75rem",
+          fontStyle: "italic",
+          color: "#1E40AF",
+          display: "flex",
+          alignItems: "center",
+          gap: 8,
+        }}
+      >
+        👤 {usuarioNombre}
+      </div>
 
       {/* Botón regresar al menú */}
       <div style={{ width: "100%", display: "flex", justifyContent: "flex-end", marginBottom: "10px" }}>

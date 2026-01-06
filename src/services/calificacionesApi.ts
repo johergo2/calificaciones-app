@@ -44,33 +44,84 @@ export interface CalificacionTabResponse {calificacionestot: CalificacionTot[]}
 export interface CalificacionRankingResponse {calificacionesranking: CalificacionRanking[]}
 
 // Obtener todas las calificaciones
-export const getCalificaciones = async (eventoId?: number) => {  
-  const response = await axios.get(`${API_URL}/calificaciones`, {
-    params: eventoId ? {evento_id: eventoId } : {},
-  });
+export const getCalificaciones = async (
+    filtros: {
+    eventoId?: number; 
+    usuarioId?: number;
+  }  
+) => {  
+
+  const params: any = {};
+
+  if (filtros.eventoId) params.evento_id = filtros.eventoId;
+  if (filtros.usuarioId) params.usuario_id = filtros.usuarioId;
+
+  const response = await axios.get(`${API_URL}/calificaciones`, 
+    { params }
+  );
+
+  // Normalización de respuesta (CLAVE)
+  if (Array.isArray(response.data?.data)) {
+    return response.data.data;
+  }  
+
+  if (Array.isArray(response.data.data)) {
+    return response.data.data;
+  }
+
+  if (Array.isArray(response.data.registros)) {
+    return response.data.registros;
+  }
+
   return response.data.calificaciones;
 };
 
 // Obtener todas las calificaciones con descripciones en cada campo
-export const getCalificacionestot = async (eventoId?: number) => {  
-  const url = eventoId
-    ? `${API_URL}/calificacionestot?evento_id=${eventoId}`
-    : `${API_URL}/calificacionestot`;
+export const getCalificacionestot = async (eventoId?: number, usuarioId?: number) => {  
+  const params: Record<string, any> = {};
 
-  const response = await axios.get<CalificacionTotResponse>(url);
+  if (eventoId) params.evento_id = eventoId;
+  if (usuarioId) params.usuario_id = usuarioId;
+
+  const response = await axios.get<CalificacionTotResponse>(
+    `${API_URL}/calificacionestot`,
+    { params }
+  );
   return response.data;
 };
 
 // Obtener todas las calificaciones con descripciones en cada campo para la consulta (Tabla)
-export const getCalificacionestab = async (): Promise<CalificacionTot[]> => {  
-  const response = await axios.get<CalificacionTabResponse>(`${API_URL}/calificacionestot`);
+export const getCalificacionestab = async (
+  eventoId?: number, 
+  usuarioId?: number  
+): Promise<CalificacionTot[]> => {  
+
+  const params: Record<string, any> = {}
+
+  if (eventoId) params.evento_id = eventoId;
+  if (usuarioId) params.usuario_id = usuarioId;  
+
+  const response = await axios.get<CalificacionTabResponse>(
+    `${API_URL}/calificacionestot`, { params }
+  );
   return response.data.calificacionestot;
 };
 
 
 // Obtener todas las calificaciones promedio ordenadas descendente para ver ganadores del evento
-export const getCalificacionesranking = async (): Promise<CalificacionRanking[]> => {  
-  const response = await axios.get<CalificacionRankingResponse>(`${API_URL}/calificacionesranking`);
+export const getCalificacionesranking = async (
+  eventoId?: number, 
+  usuarioId?: number  
+): Promise<CalificacionRanking[]> => {  
+
+  const params: Record<string, any> = {}
+
+  if (eventoId) params.evento_id = eventoId;
+  if (usuarioId) params.usuario_id = usuarioId; 
+
+  const response = await axios.get<CalificacionRankingResponse>(
+    `${API_URL}/calificacionesranking`, { params }
+  );
   return response.data.calificacionesranking;
 };
 

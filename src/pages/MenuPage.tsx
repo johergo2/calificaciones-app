@@ -3,6 +3,10 @@ import { useNavigate } from "react-router-dom";
 export default function MenuPage() {
   const navigate = useNavigate();
 
+// Usuario que inicia sesión viene de LoginPage.tsx
+const usuarioNombre = localStorage.getItem("usuarioNombre") ?? "Usuario";
+console.log("usuarioNombre:", usuarioNombre);    
+
 const cerrarSesion = () => {
   // Elimina datos de autenticación
   localStorage.removeItem("token");
@@ -39,6 +43,22 @@ const cerrarSesion = () => {
         textAlign: "center",
       }}
       >
+        <div
+          style={{
+            position: "absolute",
+            top: 145,
+            left: 155,
+            fontWeight: 600,
+            fontSize: "0.75rem",
+            fontStyle: "italic",
+            color: "#1E40AF",
+            display: "flex",
+            alignItems: "center",
+            gap: 8,
+          }}
+        >
+          👤 {usuarioNombre}
+        </div>        
 
         <div style={{ display: "flex", justifyContent: "flex-end" }}>
           <button

@@ -29,10 +29,13 @@ export default function EventosPage() {
 
   //const [mensajeOk, setMensajeOk] = useState<string>("")
   const [mostrarPopup, setMostrarPopup] = useState(false);
-  const [popupMensaje, setPopupMensaje] = useState("");
+  const [popupMensaje, setPopupMensaje] = useState(""); 
 
+  // Usuario que inicia sesión viene de LoginPage.tsx
   const usuarioId = Number(localStorage.getItem("usuarioId"));
+  const usuarioNombre = localStorage.getItem("usuarioNombre") ?? "Usuario";
   console.log("usuarioId:", usuarioId);
+  console.log("usuarioNombre:", usuarioNombre); 
 
   const navigate = useNavigate();
 
@@ -210,6 +213,24 @@ const tdStyle: React.CSSProperties = {
                   }}>🎭 GESTIÓN DE EVENTOS</h2>
 
       {/* Botón regresar al menú */}
+
+      <div
+        style={{
+          position: "absolute",
+          top: 45,
+          left: 35,
+          fontWeight: 600,
+          fontSize: "0.75rem",
+          fontStyle: "italic",
+          color: "#1E40AF",
+          display: "flex",
+          alignItems: "center",
+          gap: 8,
+        }}
+      >
+        👤 {usuarioNombre}
+      </div> 
+
       <div style={{ display: "flex", justifyContent: "flex-end" }}>
         <button
           onClick={() => navigate("/DatosBasicos")}

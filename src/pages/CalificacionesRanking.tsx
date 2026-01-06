@@ -11,6 +11,13 @@ export default function CalificacionesRanking() {
   /* Estados */
   const [calificaciones, setCalificaciones] = useState<CalificacionRanking[]>([]);
 
+  // Usuario que inicia sesión viene de LoginPage.tsx
+  const usuarioId = Number(localStorage.getItem("usuarioId"));
+  console.log("usuarioId:", usuarioId);
+  const usuarioNombre = localStorage.getItem("usuarioNombre") ?? "Usuario";  
+  console.log("usuarioNombre:", usuarioNombre); 
+
+
   /* Filtros por Columna (Cabecera de la Tabla) */
   const [filters, setFilters] = useState({
     evento_id: "",
@@ -27,9 +34,9 @@ export default function CalificacionesRanking() {
     cargarCalificaciones();
   }, []);
 
-  const cargarCalificaciones = async () => {
+  const cargarCalificaciones = async (eventoId?: number) => {
     try {
-      const data = await getCalificacionesranking();
+      const data = await getCalificacionesranking(eventoId, usuarioId);
       setCalificaciones(data);
     } catch (error) {
       console.error("Error cargando calificaciones", error);
@@ -119,6 +126,23 @@ export default function CalificacionesRanking() {
                    fontWeight: 700, letterSpacing: "0.1PX", marginTop: 50 }}>
         🏆 RANKING DE CALIFICACIONES
       </h2>
+
+      <div
+        style={{
+          position: "absolute",
+          top: 85,
+          left: 35,
+          fontWeight: 600,
+          fontSize: "0.75rem",
+          fontStyle: "italic",
+          color: "#1E40AF",
+          display: "flex",
+          alignItems: "center",
+          gap: 8,
+        }}
+      >
+        👤 {usuarioNombre}
+      </div>
 
       <div style={{ display: "flex", justifyContent: "flex-end" }}>
         <button onClick={() => navigate("/MenuCalificacionesPage")}

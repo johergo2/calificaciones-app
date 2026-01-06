@@ -21,6 +21,11 @@ export default function CalificacionesTab() {
   const [mostrarModalRecalcular, setMostrarModalRecalcular] = useState(false);
   const [procesandoPromedios] = useState(false);
 
+  // Usuario que inicia sesión viene de LoginPage.tsx
+  const usuarioId = Number(localStorage.getItem("usuarioId"));
+  console.log("usuarioId:", usuarioId);
+  const usuarioNombre = localStorage.getItem("usuarioNombre") ?? "Usuario";  
+  console.log("usuarioNombre:", usuarioNombre);   
 
 
   /* Filtros por Columna (Cabecera de la Tabla) */
@@ -41,9 +46,14 @@ export default function CalificacionesTab() {
     cargarCalificaciones();
   }, []);
 
-  const cargarCalificaciones = async () => {
+  const cargarCalificaciones = async (eventoId?: number) => {
+    if (!usuarioId) {
+      console.error("Usuario no autenticado");
+      return;
+    }      
+
     try {
-      const data = await getCalificacionestab();
+      const data = await getCalificacionestab(eventoId, usuarioId);
       setCalificaciones(data);
     } catch (error) {
       console.error("Error cargando calificaciones", error);
@@ -277,6 +287,23 @@ export default function CalificacionesTab() {
         ⭐CALIFICACIONES CONCURSO
       </h2>
 
+      <div
+        style={{
+          position: "absolute",
+          top: 65,
+          left: 35,
+          fontWeight: 600,
+          fontSize: "0.75rem",
+          fontStyle: "italic",
+          color: "#1E40AF",
+          display: "flex",
+          alignItems: "center",
+          gap: 8,
+        }}
+      >
+        👤 {usuarioNombre}
+      </div>
+
       <div style={{ display: "flex", justifyContent: "flex-end" }}>
         <button onClick={() => navigate("/MenuCalificacionesPage")}
                   style={{
@@ -325,8 +352,7 @@ export default function CalificacionesTab() {
                   <th style={thStyle}>Participante</th>
                   <th style={thStyle}>Puntaje</th> 
                   <th style={{ ...thStyle, borderTopRightRadius: 12}}>Acción</th>               
-                </tr>
-                {/*FILA DE FILTROS*/}
+                </tr>                
                 <tr>
                   <th style={thFilterStyle}>
                     <select style={filterSelectStyle}
@@ -339,7 +365,6 @@ export default function CalificacionesTab() {
                             ))}
                     </select>
                   </th>
-
                   <th style={thFilterStyle}>
                     <select style={thInputStyle}    
                       onChange={e => setFilters({ ...filters, jurado: e.target.value})}
@@ -350,7 +375,6 @@ export default function CalificacionesTab() {
                             ))}                                      
                     </select>
                   </th> 
-
                   <th style={thFilterStyle}>
                     <select style={thInputStyle}                                     
                       onChange={e => setFilters({ ...filters, evento_id: e.target.value})}
@@ -361,7 +385,6 @@ export default function CalificacionesTab() {
                             ))}                    
                     </select>                  
                   </th>  
-
                   <th style={thFilterStyle}>
                     <select style={thInputStyle}                                        
                       onChange={e => setFilters({ ...filters, evento: e.target.value})}
@@ -372,7 +395,6 @@ export default function CalificacionesTab() {
                             ))}                    
                     </select>                 
                   </th>
-
                   <th style={thFilterStyle}>
                     <select style={thInputStyle}                           
                       onChange={e => setFilters({ ...filters, categoria_id: e.target.value})}
@@ -383,7 +405,6 @@ export default function CalificacionesTab() {
                             ))}                    
                     </select>                   
                   </th>   
-
                   <th style={thFilterStyle}>
                     <select style={thInputStyle}                       
                       onChange={e => setFilters({ ...filters, categoria: e.target.value})}
@@ -393,7 +414,6 @@ export default function CalificacionesTab() {
                             <option key={v} value={v}>{v}</option>
                             ))}                      
                     </select>
-
                   </th>                               
                   <th style={thFilterStyle}>
                     <select style={thInputStyle}                                          
@@ -405,7 +425,6 @@ export default function CalificacionesTab() {
                             ))}                    
                     </select>                  
                   </th>   
-
                   <th style={thFilterStyle}>
                     <select style={thInputStyle}                         
                       onChange={e => setFilters({ ...filters, participante: e.target.value})}
@@ -416,7 +435,6 @@ export default function CalificacionesTab() {
                             ))}                    
                     </select>                   
                   </th> 
-
                   <th style={thFilterStyle}>
                     <select style={thInputStyle}                                 
                       onChange={e => setFilters({ ...filters, puntaje: e.target.value})}
@@ -427,8 +445,7 @@ export default function CalificacionesTab() {
                             ))}                    
                     </select>                
                   </th>    
-
-                </tr> {/*Fin Fila de Filtros*/}
+                </tr>
               </thead>
               <tbody>
                 {calificacionesFiltradas.length === 0 ? (

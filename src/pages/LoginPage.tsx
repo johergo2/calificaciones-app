@@ -2,6 +2,7 @@ import { useState } from "react";
 import { obtenerUsuarioPorNombre } from "../services/api";
 import { useNavigate } from "react-router-dom";
 
+
 export default function LoginPage() {
   const [nombre, setNombre] = useState("");
   const [contrasena, setContrasena] = useState("");
@@ -30,6 +31,10 @@ export default function LoginPage() {
     }
 
     if (usuario.contrasena === contrasena) {
+      //Guarda el ID y Nombre de usuario conectado
+      localStorage.setItem("usuarioId", String(usuario.id));
+      localStorage.setItem("usuarioNombre", usuario.nombre);
+
       localStorage.setItem("usuarioId", String(usuario.id)); //Captura usuario
       setMensaje(`Bienvenido ${usuario.nombre}`);
 

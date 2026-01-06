@@ -64,6 +64,12 @@ export default function AsignarJuradosCategoriasPage() {
 const [mostrarPopup, setMostrarPopup] = useState(false);
 const [popupMensaje, setPopupMensaje] = useState("");
 
+// Usuario que inicia sesión viene de LoginPage.tsx
+const usuarioId = Number(localStorage.getItem("usuarioId"));
+console.log("usuarioId:", usuarioId);
+const usuarioNombre = localStorage.getItem("usuarioNombre") ?? "Usuario";  
+console.log("usuarioNombre:", usuarioNombre); 
+
 
   /* ===============================
      Tabla
@@ -78,12 +84,12 @@ const [popupMensaje, setPopupMensaje] = useState("");
   useEffect(() => {
     cargarDatos();
     //cargarTabla();
-    cargarTabla(eventoFiltroId === "" ? undefined : eventoFiltroId);
+    cargarTabla(eventoFiltroId === "" ? undefined : eventoFiltroId, usuarioId);
   }, [eventoFiltroId]);
 
   const cargarDatos = async () => {
     setJurados(await getJurados());
-    setEventos(await getEventos());
+    setEventos(await getEventos(usuarioId));
     setCategorias(await getCategorias());
   };
 
@@ -136,7 +142,7 @@ const [popupMensaje, setPopupMensaje] = useState("");
       setPopupMensaje("✔️ Jurados asignadas correctamente");
       setMostrarPopup(true);
 
-      cargarTabla(eventoFiltroId || undefined);
+      cargarTabla(eventoFiltroId || undefined, usuarioId);
 
     } catch (error) {
       setPopupMensaje("❌ Error al asignar Jurados");
@@ -148,10 +154,10 @@ const [popupMensaje, setPopupMensaje] = useState("");
   /* ===============================
      Tabla
   ================================ */
-  const cargarTabla = async (eventoId?: number) => {
+  const cargarTabla = async (eventoId?: number, usuarioId?: number) => {
     try {
       setLoadingTabla(true);
-      const data = await getJuradosCategoriasEventos(eventoId);
+      const data = await getJuradosCategoriasEventos({eventoId, usuarioId});
       console.log("TABLA BACKEND →", data);
       setTabla(data);
     } finally {
@@ -170,7 +176,7 @@ const [popupMensaje, setPopupMensaje] = useState("");
     if (!confirm("¿Eliminar esta asignación?")) return;
 
     await eliminarCategoriaJurado(cedula, eventoId, categoriaId);
-    cargarTabla(eventoFiltroId || undefined);
+    cargarTabla(eventoFiltroId || undefined, usuarioId);
     cargarCategoriasAsignadas();
   };
 
@@ -255,6 +261,23 @@ const tdStyle: React.CSSProperties = {
       <h2 style={{ textAlign: "center", color: "#1E40AF", fontWeight: 700, letterSpacing: "0.5PX" }}>
         🎓 ASIGNAR JURADOS A EVENTOS Y CATEGORÍAS
       </h2>
+
+      <div
+        style={{
+          position: "absolute",
+          top: 45,
+          left: 35,
+          fontWeight: 600,
+          fontSize: "0.75rem",
+          fontStyle: "italic",
+          color: "#1E40AF",
+          display: "flex",
+          alignItems: "center",
+          gap: 8,
+        }}
+      >
+        👤 {usuarioNombre}
+      </div>
 
       <div style={{ display: "flex", justifyContent: "flex-end" }}>
         <button onClick={() => navigate("/EstructuraEventos")}
@@ -390,7 +413,7 @@ const tdStyle: React.CSSProperties = {
         if (eventoFiltroId === ""){
           cargarTabla();
         } else{
-          cargarTabla(eventoFiltroId);
+          cargarTabla(eventoFiltroId, usuarioId);
         }
       }}
             style={{ 

@@ -30,6 +30,7 @@ export default function CalificacionesPage() {
   const [asignaciones, setAsignaciones] = useState<any[]>([]);
   const [eventosPorJurado, setEventosPorJurado] = useState<Evento[]>([]);
   const [categoriasPorEvento, setCategoriasPorEvento] = useState<Categorias[]>([]);
+  const [eventoId] = useState<number | "">("");
   const [participantes, setParticipantes] = useState<ParticipanteCategoriaEvento[]>([]);
 
   
@@ -38,7 +39,11 @@ export default function CalificacionesPage() {
   //const [loading, setLoading] = useState(false);
   const [loadingTabla, setLoadingTabla] = useState(false);
 
-
+  // Usuario que inicia sesión viene de LoginPage.tsx
+  const usuarioId = Number(localStorage.getItem("usuarioId"));
+  const usuarioNombre = localStorage.getItem("usuarioNombre") ?? "Usuario";
+  console.log("usuarioId:", usuarioId);
+  console.log("usuarioNombre:", usuarioNombre); 
 
   /* ===============================
      Formulario
@@ -66,20 +71,28 @@ export default function CalificacionesPage() {
 
 
   useEffect(() => {
-    eventoFiltroId === "" 
-      ? cargarCalificaciones() 
-      : cargarCalificaciones(eventoFiltroId);
-    }, [eventoFiltroId]);
+    if (!usuarioId) return;
+
+      cargarCalificaciones(eventoFiltroId === "" ? undefined : eventoFiltroId, usuarioId);
+    }, [eventoFiltroId, usuarioId]);
 
 
   const cargarDatosIniciales = async () => {
     try {
-      const [juradosData, eventosData, categoriasData, asignacionesData] =
+      const eventoIdParam =
+      eventoId === "" ? undefined : Number(eventoId);    
+
+      const [juradosData, eventosData, categoriasData, asignacionesData]: [
+        Jurado[],
+        Evento[],
+        Categorias[],
+        ParticipanteCategoriaEvento[]        
+      ] =
         await Promise.all([
           getJurados(),
-          getEventos(),
+          getEventos(usuarioId),
           getCategorias(),
-          getJuradosCategoriasEventos(),
+          getJuradosCategoriasEventos({eventoId: eventoIdParam, usuarioId}),
         ]);
 
         //setJurados(juradosData);
@@ -100,10 +113,10 @@ export default function CalificacionesPage() {
     }
   };
 
-  const cargarCalificaciones = async (eventoId?: number) => {
+  const cargarCalificaciones = async (eventoId?: number, usuarioId?: number) => {
     try {
       setLoadingTabla(true);
-      const response = await getCalificacionestot(eventoId);
+      const response = await getCalificacionestot(eventoId, usuarioId);
       setCalificaciones(response.calificacionestot);
     } finally {
       setLoadingTabla(false);
@@ -147,16 +160,24 @@ export default function CalificacionesPage() {
     );
   };
 
-  const cargarParticipantes = async (eventoId: number, categoriaId: number) => {
-    const data = await getParticipantesCategoriasEventos();
+  const cargarParticipantes = async (eventoId: number, 
+                                     categoriaId: number, 
+                                     usuarioId: number) => {
+    const data: ParticipanteCategoriaEvento[] = await getParticipantesCategoriasEventos({
+      eventoId,
+      usuarioId,
+    });
 
     const filtrados = data.filter(
       p => p.evento_id === eventoId && p.categoria_id === categoriaId
     );
 
-    setParticipantes(
-      Array.from(new Map(filtrados.map(p => [p.cedula, p])).values())
+    // Eliminar duplicados por cédula
+    const participantesUnicos = Array.from(
+      new Map(filtrados.map(p => [p.cedula, p])).values()
     );
+
+    setParticipantes(participantesUnicos);
   };
 
   /* ===============================
@@ -312,6 +333,23 @@ export default function CalificacionesPage() {
         👑 CALIFICAR PARTICIPANTES
       </h2>
 
+      <div
+        style={{
+          position: "absolute",
+          top: 45,
+          left: 35,
+          fontWeight: 600,
+          fontSize: "0.75rem",
+          fontStyle: "italic",
+          color: "#1E40AF",
+          display: "flex",
+          alignItems: "center",
+          gap: 8,
+        }}
+      >
+        👤 {usuarioNombre}
+      </div>        
+
       <div style={{ display: "flex", justifyContent: "flex-end" }}>
         <button onClick={() => navigate("/MenuCalificacionesPage")}
                   style={{
@@ -393,7 +431,7 @@ export default function CalificacionesPage() {
             value={formData.categoria_id}
             onChange={e => {
               setFormData({ ...formData, categoria_id: e.target.value, cedula_participan: "" });
-              cargarParticipantes(Number(formData.evento_id), Number(e.target.value));
+              cargarParticipantes(Number(formData.evento_id), Number(e.target.value), usuarioId);
             }}
             style={campoStyle}
           >
@@ -488,13 +526,10 @@ export default function CalificacionesPage() {
         ))}
       </select>
 
-      <button onClick={() => {
-        if (eventoFiltroId === ""){
-          cargarCalificaciones();
-        } else{
-          cargarCalificaciones(eventoFiltroId);
-        }
-      }}
+      <button disabled={!usuarioId} onClick={() => 
+          cargarCalificaciones(eventoFiltroId === "" ? undefined : Number(eventoFiltroId),
+                               usuarioId)
+        }     
             style={{ 
                 padding: "7px 30px",
                 fontWeight: "bold",

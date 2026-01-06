@@ -3,6 +3,10 @@ import { useNavigate } from "react-router-dom";
 export default function MenuPage() {
   const navigate = useNavigate();
 
+  // Usuario que inicia sesión viene de LoginPage.tsx
+  const usuarioNombre = localStorage.getItem("usuarioNombre") ?? "Usuario";
+  console.log("usuarioNombre:", usuarioNombre);  
+
 
   return (
     <div
@@ -54,6 +58,22 @@ export default function MenuPage() {
           </button>
         </div>
 
+        <div
+          style={{
+            position: "absolute",
+            top: 115,
+            left: 155,
+            fontWeight: 600,
+            fontSize: "0.75rem",
+            fontStyle: "italic",
+            color: "#1E40AF",
+            display: "flex",
+            alignItems: "center",
+            gap: 8,
+          }}
+        >
+          👤 {usuarioNombre}
+        </div>
 
         {/* TÍTULO PRINCIPAL */}
         <h1
