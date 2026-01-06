@@ -34,8 +34,9 @@ export default function LoginPage() {
       //Guarda el ID y Nombre de usuario conectado
       localStorage.setItem("usuarioId", String(usuario.id));
       localStorage.setItem("usuarioNombre", usuario.nombre);
+      localStorage.setItem("usuarioRol", usuario.estado);
+      localStorage.setItem("usuarioRol", usuario.rol);
 
-      localStorage.setItem("usuarioId", String(usuario.id)); //Captura usuario
       setMensaje(`Bienvenido ${usuario.nombre}`);
 
       // Esperar 3 segundos antes de pasar al menú (opcional)

@@ -7,9 +7,9 @@ select * from participantes
 select * from jurados
 
 
-INSERT INTO usuarios (nombre, email, contrasena)
+INSERT INTO usuarios (nombre, email, contrasena, estado, rol)
 VALUES
-('Jorge Gomez 3', 'johergo3@gmail.com', 'Jorgito2');
+('Administrador', 'jorge.hernan.16780@gmail.com', 'Jorgito2', 'ACT', 'Administrador');
 
 INSERT INTO participantes (cedula, nombre, tipo, observacion)
 VALUES
@@ -335,4 +335,14 @@ VALUES ('2','23','Participante')
 	                AND ue.usuario_id = 1	)			
 				ORDER BY e.id, cat.id, c.promedio desc
 
-select * from jurados_categorias_eventos				
+select * from jurados_categorias_eventos	
+
+select u.id, u.nombre, u.email, u.estado, u.rol , ue.evento_id
+from usuarios u
+JOIN usuarios_eventos ue ON ue.usuario_id = u.id
+
+select usuarios_eventos.* from usuarios_eventos
+
+ALTER TABLE usuarios
+ADD COLUMN rol VARCHAR(20) NOT NULL DEFAULT 'Participante'
+CHECK (rol IN ('Administrador', 'Jurado', 'Participante'));

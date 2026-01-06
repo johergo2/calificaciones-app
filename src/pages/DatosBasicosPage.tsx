@@ -6,7 +6,8 @@ export default function MenuPage() {
   // Usuario que inicia sesión viene de LoginPage.tsx
   const usuarioNombre = localStorage.getItem("usuarioNombre") ?? "Usuario";
   console.log("usuarioNombre:", usuarioNombre);  
-
+  const usuarioRol = localStorage.getItem("usuarioRol"); 
+  console.log("usuarioRol:", usuarioRol);  
 
   return (
     <div
@@ -33,6 +34,7 @@ export default function MenuPage() {
           borderStyle: "solid",
           textAlign: "center",
           display: "grid",
+          position: "relative",
         }}
       >
 
@@ -41,8 +43,8 @@ export default function MenuPage() {
             onClick={() => navigate("/menu")}
             style={{
               position: "absolute",
-              top: 150,
-              right: 180,
+              top: 18,
+              right: 18,
               background: "#007bff",
               color: "white",
               padding: "6px 32px",
@@ -61,8 +63,8 @@ export default function MenuPage() {
         <div
           style={{
             position: "absolute",
-            top: 115,
-            left: 155,
+            top: 10,
+            left: 15,
             fontWeight: 600,
             fontSize: "0.75rem",
             fontStyle: "italic",
@@ -92,34 +94,42 @@ export default function MenuPage() {
 
         <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
 
-         {/*BOTONES DEL MENU*/}
-         <button
-           onClick={() => navigate("/eventos")}
-           style={botonEstilo}
-         >
-           Crear Eventos
-         </button>
+          {/*BOTONES DEL MENU*/}
+          {(usuarioRol === "Administrador") && (  
+            <button
+              onClick={() => navigate("/eventos")}
+              style={botonEstilo}
+            >
+              Crear Eventos
+            </button>
+          )} 
 
-         <button
-           onClick={() => navigate("/categorias")}
-           style={botonEstilo}
-         >
-           Crear Categorías
-         </button>
+          {(usuarioRol === "Administrador") && ( 
+            <button
+              onClick={() => navigate("/categorias")}
+              style={botonEstilo}
+            >
+              Crear Categorías
+            </button>
+          )}
 
-         <button
-           onClick={() => navigate("/participantes")}
-           style={botonEstilo}
-         >
-           Crear Participantes
-         </button>
+          {(usuarioRol === "Administrador" || usuarioRol === "Jurado") && ( 
+            <button
+              onClick={() => navigate("/participantes")}
+              style={botonEstilo}
+            >
+              Crear Participantes
+            </button>
+          )}         
 
-         <button
-           onClick={() => navigate("/jurados")}
-           style={botonEstilo}
-         >
-           Crear Integrantes de Jurado
-         </button>  
+          {(usuarioRol === "Administrador") && ( 
+            <button
+              onClick={() => navigate("/jurados")}
+              style={botonEstilo}
+            >
+              Crear Integrantes de Jurado
+            </button>  
+          )}           
                 
         </div>
       </div>

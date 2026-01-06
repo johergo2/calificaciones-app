@@ -278,7 +278,7 @@ export default function CalificacionesTab() {
   ================================ */
 
   return (
-    <div style={{ width: "98vw", padding: "2px 5px", 
+    <div style={{ width: "98vw", padding: "2px 5px", position: "relative",
                   background: "#f1f5f9", minHeight: "90vh", overflowY: "auto", }}>
 
 
@@ -290,8 +290,8 @@ export default function CalificacionesTab() {
       <div
         style={{
           position: "absolute",
-          top: 65,
-          left: 35,
+          top: 15,
+          left: 25,
           fontWeight: 600,
           fontSize: "0.75rem",
           fontStyle: "italic",

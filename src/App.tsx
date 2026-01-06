@@ -14,6 +14,9 @@ import DatosBasicosPage from "./pages/DatosBasicosPage";
 import EstructuraEventosPage from "./pages/EstructuraEventosPage";
 import MenuCalificacionesPage from "./pages/MenuCalificacionesPage";
 import CalificacionesRanking from "./pages/CalificacionesRanking";
+import CreaUsuario from "./pages/UsuariosPage";
+import MenUsuario from "./pages/MenUsuariosPage";
+import UsuarioEventos from "./pages/UsuarioEventos";
 
 function App() {
   return (
@@ -34,6 +37,9 @@ function App() {
         <Route path="/EstructuraEventos" element={<EstructuraEventosPage />} />   
         <Route path="/MenuCalificacionesPage" element={<MenuCalificacionesPage />} /> 
         <Route path="/CalificacionesRanking" element={<CalificacionesRanking />} /> 
+        <Route path="/CreaUsuarios" element={<CreaUsuario />} /> 
+        <Route path="/MenuUsuarios" element={<MenUsuario />} /> 
+        <Route path="/UsuariosEventos" element={<UsuarioEventos />} /> 
       </Routes>
     </BrowserRouter>
   );

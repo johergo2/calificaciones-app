@@ -275,7 +275,8 @@ const botonCerrarStyle: React.CSSProperties = {
      Render
 ================================ */
   return (
-    <div style={{ width: "90vw", padding: 20, background: "#f1f5f9", minHeight: "100vh" }}>
+    <div style={{ width: "90vw", padding: 20, background: "#f1f5f9", 
+                  minHeight: "100vh", position: "relative" }}>
 
       {mostrarPopup && (
         <div style={overlayStyle}>
@@ -299,8 +300,8 @@ const botonCerrarStyle: React.CSSProperties = {
       <div
         style={{
           position: "absolute",
-          top: 45,
-          left: 35,
+          top: 15,
+          left: 25,
           fontWeight: 600,
           fontSize: "0.75rem",
           fontStyle: "italic",

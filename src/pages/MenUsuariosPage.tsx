@@ -5,10 +5,9 @@ export default function MenuPage() {
 
   // Usuario que inicia sesión viene de LoginPage.tsx
   const usuarioNombre = localStorage.getItem("usuarioNombre") ?? "Usuario";
-  console.log("usuarioNombre:", usuarioNombre); 
+  console.log("usuarioNombre:", usuarioNombre);  
   const usuarioRol = localStorage.getItem("usuarioRol"); 
   console.log("usuarioRol:", usuarioRol);  
-
 
   return (
     <div
@@ -38,22 +37,6 @@ export default function MenuPage() {
           position: "relative",
         }}
       >
-        <div
-          style={{
-            position: "absolute",
-            top: 10,
-            left: 15,
-            fontWeight: 600,
-            fontSize: "0.75rem",
-            fontStyle: "italic",
-            color: "#1E40AF",
-            display: "flex",
-            alignItems: "center",
-            gap: 8,
-          }}
-        >
-          👤 {usuarioNombre}
-        </div>           
 
         <div style={{ display: "flex", justifyContent: "flex-end" }}>
           <button
@@ -77,6 +60,22 @@ export default function MenuPage() {
           </button>
         </div>
 
+        <div
+          style={{
+            position: "absolute",
+            top: 10,
+            left: 15,
+            fontWeight: 600,
+            fontSize: "0.75rem",
+            fontStyle: "italic",
+            color: "#1E40AF",
+            display: "flex",
+            alignItems: "center",
+            gap: 8,
+          }}
+        >
+          👤 {usuarioNombre}
+        </div>
 
         {/* TÍTULO PRINCIPAL */}
         <h1
@@ -88,40 +87,31 @@ export default function MenuPage() {
             color: "#333",
           }}
         >
-          🏅 Menú Calificaciones
+          📋 Gestión de Usuarios
         </h1>
 
-        <h2 style={{ marginBottom: 30 }}>Gestionar Calificaciones</h2>
+        <h2 style={{ marginBottom: 30 }}>Crear usuarios y asignar eventos</h2>
 
         <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
 
-         {/*BOTONES DEL MENU*/}
-          {(usuarioRol === "Administrador" || usuarioRol === "Jurado") && (          
+          {/*BOTONES DEL MENU*/}
+          {(usuarioRol === "Administrador") && (  
             <button
-              onClick={() => navigate("/calificaciones")}
+              onClick={() => navigate("/CreaUsuarios")}
               style={botonEstilo}
             >
-              Calificar Participante
+              Crear Usuario
             </button>
-          )}          
+          )} 
 
-          {(usuarioRol === "Administrador" || usuarioRol === "Jurado") && ( 
+          {(usuarioRol === "Administrador") && ( 
             <button
-              onClick={() => navigate("/ConsultaCalificaciones")}
+              onClick={() => navigate("/UsuariosEventos")}
               style={botonEstilo}
             >
-              Consultar Calificaciones
-            </button> 
-          )}          
-
-          {(usuarioRol === "Administrador" || usuarioRol === "Jurado"  || usuarioRol === "Participante") && ( 
-            <button
-              onClick={() => navigate("/CalificacionesRanking")}
-              style={botonEstilo}
-            >
-              Calificaciones Ranking
-            </button> 
-          )}                   
+              Asignar Eventos a Usuario
+            </button>
+          )}
                 
         </div>
       </div>

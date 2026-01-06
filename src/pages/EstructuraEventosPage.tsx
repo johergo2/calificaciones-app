@@ -6,6 +6,8 @@ export default function MenuPage() {
 // Usuario que inicia sesión viene de LoginPage.tsx
 const usuarioNombre = localStorage.getItem("usuarioNombre") ?? "Usuario";
 console.log("usuarioNombre:", usuarioNombre);   
+const usuarioRol = localStorage.getItem("usuarioRol"); 
+console.log("usuarioRol:", usuarioRol); 
 
 
   return (
@@ -33,13 +35,14 @@ console.log("usuarioNombre:", usuarioNombre);
           borderStyle: "solid",
           textAlign: "center",
           display: "grid",
+          position: "relative",
         }}
       >
         <div
           style={{
             position: "absolute",
-            top: 145,
-            left: 155,
+            top: 10,
+            left: 15,
             fontWeight: 600,
             fontSize: "0.75rem",
             fontStyle: "italic",
@@ -57,8 +60,8 @@ console.log("usuarioNombre:", usuarioNombre);
             onClick={() => navigate("/menu")}
             style={{
               position: "absolute",
-              top: 180,
-              right: 170,
+              top: 18,
+              right: 18,
               background: "#007bff",
               color: "white",
               padding: "6px 32px",
@@ -93,26 +96,32 @@ console.log("usuarioNombre:", usuarioNombre);
         <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
 
          {/*BOTONES DEL MENU*/}
-         <button
-           onClick={() => navigate("/asignarcategorias")}
-           style={botonEstilo}
-         >
-          Asociar Categorias/Eventos
-         </button>
+          {(usuarioRol === "Administrador") && (         
+            <button
+              onClick={() => navigate("/asignarcategorias")}
+              style={botonEstilo}
+            >
+              Asociar Categorias/Eventos
+            </button>
+          )}          
 
-         <button
-           onClick={() => navigate("/asignarJurados")}
-           style={botonEstilo}
-         >
-           Asociar Jurados/Eventos/Categorias
-         </button>         
+          {(usuarioRol === "Administrador") && (  
+            <button
+              onClick={() => navigate("/asignarJurados")}
+              style={botonEstilo}
+            >
+              Asociar Jurados/Eventos/Categorias
+            </button>  
+          )}                 
 
-         <button
-           onClick={() => navigate("/asignarParticipantes")}
-           style={botonEstilo}
-         >
-           Asociar Participantes/Eventos/Categorias
-         </button>
+          {(usuarioRol === "Administrador" || usuarioRol === "Jurado") && ( 
+            <button
+              onClick={() => navigate("/asignarParticipantes")}
+              style={botonEstilo}
+            >
+              Asociar Participantes/Eventos/Categorias
+            </button>
+          )}           
                 
         </div>
       </div>

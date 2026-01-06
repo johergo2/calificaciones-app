@@ -207,18 +207,16 @@ const tdStyle: React.CSSProperties = {
      Render
   ================================ */
   return (
-    <div style={{ width: "90vw", padding: 20, background: "#f1f5f9", minHeight: "100vh" }}>
+    <div style={{ width: "90vw", padding: 20, background: "#f1f5f9", minHeight: "100vh", position:"relative" }}>
       <h2 style={{ textAlign: "center", color: "#1E40AF", 
                    fontWeight: 700, letterSpacing: "0.5PX" 
                   }}>🎭 GESTIÓN DE EVENTOS</h2>
 
-      {/* Botón regresar al menú */}
-
       <div
         style={{
           position: "absolute",
-          top: 45,
-          left: 35,
+          top: 10,
+          left: 15,
           fontWeight: 600,
           fontSize: "0.75rem",
           fontStyle: "italic",
@@ -231,6 +229,7 @@ const tdStyle: React.CSSProperties = {
         👤 {usuarioNombre}
       </div> 
 
+      {/* Botón regresar al menú */}
       <div style={{ display: "flex", justifyContent: "flex-end" }}>
         <button
           onClick={() => navigate("/DatosBasicos")}

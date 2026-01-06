@@ -3,15 +3,35 @@ import axios from "axios";
 const API_URL = "https://api-usuarios-f1im.onrender.com/api";
 
 export interface Usuario {
-  id: number;
+  id?: number;
   nombre: string;
   email: string;
   contrasena: string;
-  fecha_creacion: string;
-  fecha_actualizacion: string;
+  fecha_creacion?: string;
+  fecha_actualizacion?: string;
+  estado: string;
+  rol: string;
 }
 
+export interface UsuarioEvento {
+  id?: number;
+  usuario_id: string;
+  evento_id: string;
+  fecha_creacion?: string;
+  fecha_actualizacion?: string;
+}
+
+//======================================
+// Obtener todos los usuarios
+//======================================
+export const getUsuarios = async (): Promise<Usuario[]> => {
+  const response = await axios.get(`${API_URL}/usuarios`);
+  return response.data.usuarios;
+};
+
+//======================================
 // Obtener usuario por nombre
+//======================================
 export const obtenerUsuarioPorNombre = async (
   nombre: string
 ): Promise<Usuario | null> => {
@@ -34,7 +54,9 @@ export const obtenerUsuarioPorNombre = async (
   }
 };
 
+//======================================
 // Validar login
+//======================================
 export const validarUsuario = async (
   nombre: string,
   contrasena: string
@@ -51,4 +73,61 @@ export const validarUsuario = async (
     console.error("Error al consultar la API:", error);
     return null;
   }
+};
+
+//======================================
+//Crear Usuario
+//======================================
+export const crearUsuario = async (evento: Usuario) => {
+  const response = await axios.post(`${API_URL}/usuario`, evento);
+  return response.data;
+};
+
+//======================================
+// Actualizar Usuario
+//======================================
+export const actualizarUsuario = async (id: number, evento: Usuario) => {
+  const response = await axios.put(`${API_URL}/usuarios/${id}`, evento);
+  return response.data;
+};
+
+//======================================
+// Eliminar usuario
+//======================================
+export const eliminarUsuario = async (id: number) => {
+  const response = await axios.delete(`${API_URL}/usuarios/${id}`);
+  return response.data;
+};
+
+//====================================================
+// Obtener todos los usuarios y sus eventos asociados
+//====================================================
+export const getUsuariosEventos = async (): Promise<UsuarioEvento[]> => {
+  const response = await axios.get(`${API_URL}/usuarios-eventos`);
+  return response.data.usuarioseventos;
+};
+
+//======================================
+// Crear Usuarios Eventos
+//======================================
+export const crearUsuarioEvento = async (evento: UsuarioEvento) => {
+  const response = await axios.post(`${API_URL}/usuario-evento`, evento);
+  return response.data;
+};
+
+
+//======================================
+// Actualizar Usuarios Eventos
+//======================================
+export const actualizarUsuarioEvento = async (id: number, evento: UsuarioEvento) => {
+  const response = await axios.put(`${API_URL}/usuarios-eventos/${id}`, evento);
+  return response.data;
+};
+
+//======================================
+// Eliminar usuarios eventos
+//======================================
+export const eliminarUsuarioEvento = async (id: number) => {
+  const response = await axios.delete(`${API_URL}/usuarios-eventos/${id}`);
+  return response.data;
 };

@@ -5,7 +5,9 @@ export default function MenuPage() {
 
 // Usuario que inicia sesión viene de LoginPage.tsx
 const usuarioNombre = localStorage.getItem("usuarioNombre") ?? "Usuario";
+const usuarioRol = localStorage.getItem("usuarioRol"); 
 console.log("usuarioNombre:", usuarioNombre);    
+console.log("usuarioRol:", usuarioRol);  
 
 const cerrarSesion = () => {
   // Elimina datos de autenticación
@@ -41,13 +43,14 @@ const cerrarSesion = () => {
         borderWidth: "1px",
         borderStyle: "solid",
         textAlign: "center",
+        position: "relative",
       }}
       >
         <div
           style={{
             position: "absolute",
-            top: 145,
-            left: 155,
+            top: 10,
+            left: 15,
             fontWeight: 600,
             fontSize: "0.75rem",
             fontStyle: "italic",
@@ -65,8 +68,8 @@ const cerrarSesion = () => {
             onClick={cerrarSesion}
             style={{
               position: "absolute",
-              top: 185,
-              right: 180,
+              top: 18,
+              right: 18,
               background: "#007bff",
               color: "white",
               padding: "6px 22px",
@@ -101,26 +104,42 @@ const cerrarSesion = () => {
         <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
 
          {/*BOTONES DEL MENU*/}
-         <button
-           onClick={() => navigate("/DatosBasicos")}
-           style={botonEstilo}
-         >
-           Datos Básicos
-         </button>     
+        {(usuarioRol === "Administrador") && (         
+          <button
+            onClick={() => navigate("/MenuUsuarios")}
+            style={botonEstilo}
+          >
+            Gestión de Usuarios
+          </button>  
+        )} 
 
-         <button
-           onClick={() => navigate("/EstructuraEventos")}
-           style={botonEstilo}
-         >
-           Estructurar Evento
-         </button>   
+        {(usuarioRol === "Administrador" || usuarioRol === "Jurado") && (         
+          <button
+            onClick={() => navigate("/DatosBasicos")}
+            style={botonEstilo}
+          >
+            Datos Básicos
+          </button>  
+        )} 
 
-         <button
-           onClick={() => navigate("/MenuCalificacionesPage")}
-           style={botonEstilo}
-         >
-           Calificaciones
-         </button>
+        {(usuarioRol === "Administrador" || usuarioRol === "Jurado") && (
+          <button
+            onClick={() => navigate("/EstructuraEventos")}
+            style={botonEstilo}
+          >
+            Estructurar Evento
+          </button>  
+        )} 
+
+        {(usuarioRol === "Participante" || usuarioRol === "Administrador" || usuarioRol === "Jurado") && (
+          <button
+            onClick={() => navigate("/MenuCalificacionesPage")}
+            style={botonEstilo}
+          >
+            Calificaciones
+          </button>
+        )}
+
                 
         </div>
       </div>
