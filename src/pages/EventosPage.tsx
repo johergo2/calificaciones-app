@@ -375,7 +375,6 @@ const tdStyle: React.CSSProperties = {
           }}
         >
 
-
               {/* Campo - Fecha */}
               <div style={{ flex: 1 }}>
                 <label style={{ fontWeight: "bold", display: "block", marginBottom: 6 }}>
