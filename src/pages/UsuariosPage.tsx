@@ -48,27 +48,27 @@ export default function UsuariosPage() {
 
 
   const guardarUsuario = async () => {
-  // VALIDACIÓN: Campos obligatorios
-  if (!formData.nombre || formData.nombre.trim() === "") {
-    setErrorNombre("Debe ingresar un nombre - Obligatorio");
-    return; // detener el guardado  
-  }  
-  if (!formData.email || formData.email.trim() === "") {
-    setErrorEmail("Debe ingresar el email del usuario - Obligatorio");
-    return; // detener el guardado  
-  }  
-  if (!formData.contrasena || formData.contrasena.trim() === "") {
-    setErrorContrasena("Debe ingresar una contraseña para el usuario - Obligatorio");
-    return; // detener el guardado  
-  }  
-    if (!formData.estado || formData.estado.trim() === "") {
-    setErrorEstado("Debe ingresar el estado ACT o INA del usuario - Obligatorio");
-    return; // detener el guardado  
-  }  
-  if (!formData.rol || formData.rol.trim() === "") {
-    setErrorRol("Debe asociar el Rol al usuario - Obligatorio");
-    return; // detener el guardado  
-  }    
+    // VALIDACIÓN: Campos obligatorios
+    if (!formData.nombre || formData.nombre.trim() === "") {
+      setErrorNombre("Debe ingresar un nombre - Obligatorio");
+      return; // detener el guardado  
+    }  
+    if (!formData.email || formData.email.trim() === "") {
+      setErrorEmail("Debe ingresar el email del usuario - Obligatorio");
+      return; // detener el guardado  
+    }  
+    if (!formData.contrasena || formData.contrasena.trim() === "") {
+      setErrorContrasena("Debe ingresar una contraseña para el usuario - Obligatorio");
+      return; // detener el guardado  
+    }  
+      if (!formData.estado || formData.estado.trim() === "") {
+      setErrorEstado("Debe ingresar el estado ACT o INA del usuario - Obligatorio");
+      return; // detener el guardado  
+    }  
+    if (!formData.rol || formData.rol.trim() === "") {
+      setErrorRol("Debe asociar el Rol al usuario - Obligatorio");
+      return; // detener el guardado  
+    }    
     setErrorNombre(""); // limpiar error si hay nombre
     setErrorEmail(""); // limpiar error si hay email
     setErrorContrasena(""); // limpiar error si hay contraseña
@@ -96,28 +96,28 @@ export default function UsuariosPage() {
         setPopupMensaje("✔️ Usuario creado correctamente");
         setMostrarPopup(true);
       }
-    // Resetear formulario
-    setFormData({
-      nombre: "",
-      email: "",            
-      contrasena: "",      
-      estado: "",      
-      rol: "",      
-    });
+      // Resetear formulario
+      setFormData({
+        nombre: "",
+        email: "",            
+        contrasena: "",      
+        estado: "",      
+        rol: "",      
+      });
 
-    cargarUsuarios();
+      cargarUsuarios();
 
-    // Ocultar el mensaje después de 4 segundos
-    //setTimeout(() => setMensajeOk(""), 4000);
+      // Ocultar el mensaje después de 4 segundos
+      //setTimeout(() => setMensajeOk(""), 4000);
 
-  } catch (error) {
+    } catch (error) {
     console.error("Error al guardar usuario: ", error);
     setErrorNombre("Error al guardar usuario, revisa el nombre.");
     setErrorEmail("Error al guardar usuario, revisa el email.");
     setErrorContrasena("Error al guardar usuario, revisa la contrasena.");
     setErrorEstado("Error al guardar usuario, revisa el estado.");
     setErrorRol("Error al guardar usuario, revisa el Rol.");
-  }
+    }
 
   };
 
@@ -148,7 +148,7 @@ export default function UsuariosPage() {
 
   return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())} ` +
          `${pad(d.getHours())}:${pad(d.getMinutes())}:${pad(d.getSeconds())}`;
-};
+  };
 
 
   //Estilos para popup

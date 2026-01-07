@@ -239,7 +239,7 @@ select * FROM categorias  c.id
 select * FROM usuarios_eventos --ue.evento_id ec.evento_id
 
 INSERT INTO usuarios_eventos (usuario_id, evento_id, rol)
-VALUES ('2','23','Participante')
+VALUES ('4','23','n')
 
         SELECT
             pce.id,
@@ -337,6 +337,8 @@ VALUES ('2','23','Participante')
 
 select * from jurados_categorias_eventos	
 
+select * from usuarios 
+
 select u.id, u.nombre, u.email, u.estado, u.rol , ue.evento_id
 from usuarios u
 JOIN usuarios_eventos ue ON ue.usuario_id = u.id
@@ -346,3 +348,9 @@ select usuarios_eventos.* from usuarios_eventos
 ALTER TABLE usuarios
 ADD COLUMN rol VARCHAR(20) NOT NULL DEFAULT 'Participante'
 CHECK (rol IN ('Administrador', 'Jurado', 'Participante'));
+
+ALTER TABLE usuarios_eventos
+DROP COLUMN rol;
+
+        INSERT INTO usuarios (nombre, email, contrasena, estado, rol)
+        VALUES ('Pilar Villafanez', 'pilar@email.com', '123456', 'ACT', 'Participante')

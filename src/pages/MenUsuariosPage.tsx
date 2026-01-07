@@ -104,7 +104,7 @@ export default function MenuPage() {
             </button>
           )} 
 
-          {(usuarioRol === "Administrador") && ( 
+          {(usuarioRol === "Administrador" && usuarioNombre === "Administrador") && ( 
             <button
               onClick={() => navigate("/UsuariosEventos")}
               style={botonEstilo}

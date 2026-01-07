@@ -15,11 +15,21 @@ export interface Usuario {
 
 export interface UsuarioEvento {
   id?: number;
-  usuario_id: string;
-  evento_id: string;
+  usuario_id: number | null;
+  evento_id: number | null;
   fecha_creacion?: string;
   fecha_actualizacion?: string;
 }
+
+export type UsuarioEventoCreate = {
+  usuario_id: number;
+  evento_id: number;
+};
+
+export type UsuarioEventoUpdate = {
+  evento_id: number;
+};
+
 
 //======================================
 // Obtener todos los usuarios
@@ -103,8 +113,16 @@ export const eliminarUsuario = async (id: number) => {
 // Obtener todos los usuarios y sus eventos asociados
 //====================================================
 export const getUsuariosEventos = async (): Promise<UsuarioEvento[]> => {
-  const response = await axios.get(`${API_URL}/usuarios-eventos`);
-  return response.data.usuarioseventos;
+  try {
+    const response = await axios.get(`${API_URL}/usuarios-eventos`);
+    console.log("📌 RESPONSE.DATA usuarios-eventos:", response.data);
+    const data = response.data["usuarios-eventos"];
+    console.log("📌 ES ARRAY:", Array.isArray(response.data));
+    return Array.isArray(data) ? data : [];
+  } catch (error) {
+    console.error("Error cargando usuarios_eventos", error)
+    return [];
+  }
 };
 
 //======================================
@@ -119,7 +137,7 @@ export const crearUsuarioEvento = async (evento: UsuarioEvento) => {
 //======================================
 // Actualizar Usuarios Eventos
 //======================================
-export const actualizarUsuarioEvento = async (id: number, evento: UsuarioEvento) => {
+export const actualizarUsuarioEvento = async (id: number, evento: UsuarioEventoUpdate) => {
   const response = await axios.put(`${API_URL}/usuarios-eventos/${id}`, evento);
   return response.data;
 };
