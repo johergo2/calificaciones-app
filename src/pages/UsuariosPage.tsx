@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { getUsuarios, 
+         obtenerUsuarioPorNombre,
          crearUsuario,
          actualizarUsuario,
          eliminarUsuario } from "../services/api";
@@ -37,8 +38,13 @@ export default function UsuariosPage() {
 
 
   const cargarUsuarios = async () => {
-    const data = await getUsuarios();
-    setUsuarios(data);
+    if (usuarioNombre === "Administrador") {
+      const data = await getUsuarios();
+      setUsuarios(data);
+    } else {
+      const usuario = await obtenerUsuarioPorNombre(usuarioNombre);
+      setUsuarios(usuario ? [usuario] : []);
+    }        
   };
 
   useEffect(() => {

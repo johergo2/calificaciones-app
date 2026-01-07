@@ -1,11 +1,17 @@
 import { useEffect, useState } from "react";
 import type { Evento } from "../services/eventosApi";
+import type { UsuarioEvento } from "../services/api";
 import {
   getEventos,
   crearEvento,
   actualizarEvento,
   eliminarEvento,
 } from "../services/eventosApi";
+
+import {
+  crearUsuarioEvento
+} from "../services/api";
+
 import { useNavigate } from "react-router-dom";
 
 
@@ -21,6 +27,7 @@ export default function EventosPage() {
     lugar: "",
     estado: "ACT",
   });
+
 
   const [errorFecha, setErrorFecha] = useState<string>("");
   const [errorDescripcion, setErrorDescripcion] = useState<string>("");
@@ -103,13 +110,30 @@ export default function EventosPage() {
         setMostrarPopup(true);        
         setEditando(null);
       } else {
-        await crearEvento(payload);
+        const eventoCreado = await crearEvento(payload);
+        if (!eventoCreado.id) {
+           throw new Error("No se pudo obtener el ID del evento creado");
+        }        
+
+        const usuarioEvento: UsuarioEvento[] = [
+          {
+            usuario_id: usuarioId,
+            evento_id: eventoCreado.id,
+          },
+          {
+            usuario_id: 1, // Usuario Administrador siempre es id=1 se crea registro en tabla usuarios_eventos
+            evento_id: eventoCreado.id,
+          },
+        ];
+
+        await Promise.all(
+          usuarioEvento.map((r) => crearUsuarioEvento(r))
+        );
+        
         //setMensajeOk("✔️ Evento creado correctamente");
         setPopupMensaje("✔️ Evento creado correctamente");
         setMostrarPopup(true); 
-      }
-    
-    
+      }    
 
     // Resetear formulario
     setFormData({
@@ -126,8 +150,13 @@ export default function EventosPage() {
     // Ocultar el mensaje después de 4 segundos
     //setTimeout(() => setMensajeOk(""), 4000);
 
-  } catch (error) {
-    console.error("Error al guardar evento: ", error);
+  } catch (error: any) {
+    console.error("Error al guardar evento A: ", error);
+
+    if (error.response) {
+      console.error("Status B:", error.response.status);
+      console.error("Data C:", error.response.data);
+    }
     setErrorFecha("Error al guardar evento, revisa los datos.");
     setErrorDescripcion("Error al guardar evento, revisa la descripción.");
   }
@@ -280,7 +309,9 @@ const tdStyle: React.CSSProperties = {
 
         {/* Campo - Nombre */}
         <div style={{ marginBottom: "10px" }}>
-          <label style={{ fontWeight: "bold", display: "block", marginBottom: 6 }}>Nombre del Evento:</label>
+          <label style={{ fontWeight: "bold", display: "block", marginBottom: 6 }}>
+            Nombre del Evento:
+          </label>
           <input
             name="nombre"
             placeholder="Nombre del Evento"
