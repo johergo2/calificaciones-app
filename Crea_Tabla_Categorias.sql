@@ -343,14 +343,35 @@ select u.id, u.nombre, u.email, u.estado, u.rol , ue.evento_id
 from usuarios u
 JOIN usuarios_eventos ue ON ue.usuario_id = u.id
 
-select usuarios_eventos.* from usuarios_eventos
+select usuarios_eventos.* from usuarios_eventos order by evento_id
 
 ALTER TABLE usuarios
 ADD COLUMN rol VARCHAR(20) NOT NULL DEFAULT 'Participante'
 CHECK (rol IN ('Administrador', 'Jurado', 'Participante'));
 
-ALTER TABLE usuarios_eventos
-DROP COLUMN rol;
 
         INSERT INTO usuarios (nombre, email, contrasena, estado, rol)
         VALUES ('Pilar Villafanez', 'pilar@email.com', '123456', 'ACT', 'Participante')
+
+INSERT INTO usuarios_eventos (usuario_id, evento_id)
+        VALUES ('8', '19')		
+
+
+ALTER TABLE usuarios_eventos
+DROP CONSTRAINT fk_usuario_usueven;
+
+UPDATE usuarios SET id = 1 WHERE id = 333
+
+UPDATE usuarios SET id = 1 WHERE id = 4
+
+ALTER TABLE usuarios_eventos
+ADD CONSTRAINT fk_usuario_usueven
+FOREIGN KEY (usuario_id)
+REFERENCES usuarios(id)
+ON UPDATE CASCADE;
+
+select * from usuarios order by id
+
+select * from usuarios_eventos order by evento_id
+
+select * from eventos order by id

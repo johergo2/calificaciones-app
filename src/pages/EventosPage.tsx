@@ -1,3 +1,4 @@
+import axios from "axios";
 import { useEffect, useState } from "react";
 import type { Evento } from "../services/eventosApi";
 import type { UsuarioEvento } from "../services/api";
@@ -36,6 +37,8 @@ export default function EventosPage() {
 
   //const [mensajeOk, setMensajeOk] = useState<string>("")
   const [mostrarPopup, setMostrarPopup] = useState(false);
+  const [mostrarModalEliminar, setMostrarModalEliminar] = useState(false);
+  const [eventoIdAEliminar, setEventoIdAEliminar] = useState<number | null>(null);
   const [popupMensaje, setPopupMensaje] = useState(""); 
 
   // Usuario que inicia sesión viene de LoginPage.tsx
@@ -172,10 +175,23 @@ export default function EventosPage() {
   };
 
   const eliminar = async (id: number) => {
-    if (confirm("¿Seguro que deseas eliminar este evento?")) {
-      await eliminarEvento(id);
-      cargarEventos();
-    }
+   
+      try {
+        await eliminarEvento(id);
+        cargarEventos();
+      } catch(error) {
+        if (axios.isAxiosError(error)) {
+          const status = error.response?.status;
+          const detail = error.response?.data?.detail;
+          if (status === 409 && detail === "No se puede eliminar evento porque tiene categorías asociadas") {
+            //alert("No es posible eliminar evento porque tiene categorías asociadas, elimina las categorías");
+            setPopupMensaje("⛔ Imposible eliminar, tiene categorías asociadas");
+            setMostrarPopup(true);        
+            return;
+          }
+        }
+        alert("Ocurrió un error con las categorías al eliminar el evento")
+      }
   };
 
 //Estilos para popup
@@ -230,6 +246,24 @@ const tdStyle: React.CSSProperties = {
   //whiteSpace: "nowrap",      // 👈 no permite salto de línea
   overflow: "hidden",        // 👈 oculta el exceso
   textOverflow: "ellipsis",  // 👈 muestra "..."  
+};
+
+const btnCancelarStyle: React.CSSProperties = {
+  background: "#2563EB",
+  color: "white",
+  padding: "6px 12px",
+  borderRadius: 6,
+  border: "none",
+  cursor: "pointer",
+};
+
+const btnGuardarStyle: React.CSSProperties = {
+  background: "#2563EB",
+  color: "white",
+  padding: "6px 14px",
+  borderRadius: 6,
+  border: "none",
+  cursor: "pointer",
 };
 
   /* ===============================
@@ -291,6 +325,39 @@ const tdStyle: React.CSSProperties = {
           </div>
         </div>
       )}
+
+      {mostrarModalEliminar && (
+        <div style={overlayStyle}>
+          <div style={modalStyle}>
+            <h3>Atención!!</h3>
+            <p>
+              Revisar si tiene categorías asociadas.
+              <br />
+              ¿Confirma Eliminar el Evento?.
+            </p>
+            <div style={{ display: "flex", justifyContent: "flex-end", gap: "10px" }}>
+              <button
+                onClick={() => setMostrarModalEliminar(false)}
+                style={btnCancelarStyle}                
+              >
+                No
+              </button>
+
+              <button
+                onClick={() => {
+                  if (eventoIdAEliminar !== null) {
+                    eliminar(eventoIdAEliminar);  
+                  }
+                    setMostrarModalEliminar(false);
+                }}
+                style={btnGuardarStyle}                
+              >
+                Si
+              </button>
+            </div>
+          </div>
+        </div>
+      )}      
 
       {/* Formulario */}
       <div
@@ -550,7 +617,10 @@ const tdStyle: React.CSSProperties = {
                           margin: "6px",
                           cursor: "pointer", 
                           padding: "3px 15px",}}                
-                  onClick={() => eliminar(e.id!)}                  
+                  onClick={() => {
+                    setEventoIdAEliminar(e.id!);
+                    setMostrarModalEliminar(true);                    
+                  }} 
                 >
                   🗑️
                 </button>
