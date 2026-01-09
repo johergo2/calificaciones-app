@@ -10,6 +10,7 @@ import {
 
 import type { CategoriaForm } from "../services/categoriasApi";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
 
 
 export default function CategoriasPage() {
@@ -69,13 +70,13 @@ export default function CategoriasPage() {
       if (editando) {
         await actualizarCategoria(editando.id!, payload);
         //setMensajeOk("✔️ Categoria actualizada correctamente");
-        setPopupMensaje("✔️ Evento actualizado correctamente");
+        setPopupMensaje("✔️ Categoría actualizada correctamente");
         setMostrarPopup(true); 
         setEditando(null);
       } else {
         await crearCategoria(payload);
         //setMensajeOk("✔️ Categoria creada correctamente");
-        setPopupMensaje("✔️ Evento actualizado correctamente");
+        setPopupMensaje("✔️ Categoría creada correctamente");
         setMostrarPopup(true); 
       }
     
@@ -92,7 +93,7 @@ export default function CategoriasPage() {
       //setTimeout(() => setMensajeOk(""), 4000);
 
    } catch (error) {
-     console.error("Error al guardar evento: ", error);
+     console.error("Error al guardar categoría: ", error);
      setErrorCategoria("Error al guardar categoria1, revisa los datos.");    
    }
 
@@ -107,10 +108,22 @@ export default function CategoriasPage() {
   };
 
   const eliminar = async (id: number) => {
-    if (confirm("¿Seguro que deseas eliminar esta categoria?")) {
-      await eliminarCategoria(id);
-      cargarCategorias();
+    try {
+      if (confirm("¿Seguro que deseas eliminar esta categoria?")) {
+        await eliminarCategoria(id);
+        cargarCategorias();
+      }
+    } catch(error) {
+      if (axios.isAxiosError(error)) {
+        const status = error.response?.status;
+        const detail = error.response?.data?.detail;
+        if (status === 409 && detail === "No se puede eliminar Categoría tiene dependencias") {
+          alert("No es posible eliminar Categoría, tiene participantes o jurados");
+          return;
+        }
+      }
     }
+
   };
 
   //Estilos para popup

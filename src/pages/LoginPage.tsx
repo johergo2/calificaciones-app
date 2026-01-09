@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { obtenerUsuarioPorNombre } from "../services/api";
 import { useNavigate } from "react-router-dom";
+import FondoPpal from "../imagenes/Fondo1.jpeg"
 
 
 export default function LoginPage() {
@@ -52,43 +53,72 @@ export default function LoginPage() {
 
   return (
     <div 
-      style={{ 
-        minHeight: "100vh",          // Ocupa toda la pantalla
-        width: "100vw",           // Garantiza ancho completo        
+      style={{
+        minHeight: "100vh",
+        width: "100vw",
         display: "flex",
-        justifyContent: "center", // Centra verticalmente        
-        flexDirection: "column",
-        alignItems: "center",     // Centra horizontalmente        
-       // margin: "50px auto", 
-        textAlign: "center",
-       // background: "#f5f5f5",
+        justifyContent: "center",
+        alignItems: "center",
+
+        backgroundImage: `
+          linear-gradient(
+            rgba(2,6,23,0.25),
+            rgba(2,6,23,0.25)
+          ),
+          url(${FondoPpal})
+        `,
+        backgroundSize: "cover",
+        backgroundPosition: "center",
+        backgroundRepeat: "no-repeat",
       }}
     >
 
         <div
           style={{
-            width: "80vw",
-            maxWidth: "600px",       
-            padding: "20px"      ,
-            background: "#ebeef0ff",
+            width: "90%",
+            maxWidth: "420px",
+            padding: "30px 25px",
+            //background: "#ffffff",
             display: "flex",
             flexDirection: "column",
-            gap: "15px",          
-            borderRadius: "12px", 
-            borderColor: "#8cbbf8ff",
-            borderWidth: "1px",
-            borderStyle: "solid",
-            alignItems: "center",     // Centra horizontalmente     
+            gap: "16px",
+            borderRadius: "16px",
+            boxShadow: "0 15px 35px rgba(0,0,0,0.25)",
+            alignItems: "center",
+            backdropFilter: "blur(6px)",
+            background: "linear-gradient(135deg,rgba(241, 245, 249, 0.96), rgba(203, 213, 225, 0.92))",
           }}
         >
 
-        <h2>Inicio Calificaciones</h2>
+        <h2
+          style={{
+            marginBottom: "1px",
+            color: "#0f4aebff",
+            fontWeight: 700,
+            letterSpacing: "0.5px"
+          }}        
+        >CalificaPro</h2>
+
+        <h3
+          style={{
+            marginBottom: "8px",
+            marginTop: "6px",
+            color: "#083bc9ff",
+            fontWeight: 400,
+            letterSpacing: "0.2px",
+            fontSize: 12,
+            textAlign: "center",
+            lineHeight: "1.5",
+          }} 
+        > Aplicación para evaluación de eventos, permite crear jurados, calificar participantes y generar resultados para determinar ganadores.                          
+        </h3>
 
         <input
           placeholder="Nombre"
           value={nombre}
           onChange={(e) => setNombre(e.target.value)}
-          style={{ width: "60%", marginBottom: 10, padding: 8, borderRadius: 6, borderColor: "#d5d9dfff" }}
+          style={{ width: "60%", marginBottom: 10, 
+            padding: 8, borderRadius: 6, borderColor: "#d5d9dfff" }}
         />
 
         <input
@@ -99,7 +129,13 @@ export default function LoginPage() {
           style={{ width: "60%", marginBottom: 10, padding: 8, borderRadius: 6, borderColor: "#d5d9dfff" }}
         />
 
-        <button onClick={handleLogin} style={{ width: "60%", padding: 8, background: "#007bff", alignItems: "center", color: "white" }} disabled={loading} >
+        <button onClick={handleLogin} 
+          style={{ width: "60%", 
+                   padding: 8, 
+                   background: "#007bff", 
+                   alignItems: "center", color: "white" 
+                 }} 
+                 disabled={loading} >
           Ingresar
         </button>
 

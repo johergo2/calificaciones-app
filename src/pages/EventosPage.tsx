@@ -174,6 +174,9 @@ export default function EventosPage() {
     });
   };
 
+  //=====================================
+  // Eliminar Evento
+  //=====================================
   const eliminar = async (id: number) => {
    
       try {

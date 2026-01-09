@@ -374,4 +374,10 @@ select * from usuarios order by id
 
 select * from usuarios_eventos order by evento_id
 
-select * from eventos order by id
+select * from participantes_categorias_eventos order by id
+
+select * from jurados_categorias_eventos where evento_id = 23 order by id
+
+select * from eventos_categorias order by id
+
+

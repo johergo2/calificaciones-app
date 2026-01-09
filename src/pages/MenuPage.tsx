@@ -1,4 +1,5 @@
 import { useNavigate } from "react-router-dom";
+import FondoPpal from "../imagenes/Fondo2.jpg"
 
 export default function MenuPage() {
   const navigate = useNavigate();
@@ -29,6 +30,16 @@ const cerrarSesion = () => {
         height: "100vh",          // Ocupa toda la pantalla
         width: "100vw",           // Garantiza ancho completo             
         background: "#f5f5f5",
+        backgroundImage: `
+          linear-gradient(
+            rgba(2,6,23,0.25),
+            rgba(2,6,23,0.25)
+          ),
+          url(${FondoPpal})
+        `,
+        backgroundSize: "cover",
+        backgroundPosition: "center",
+        backgroundRepeat: "no-repeat",        
       }}
     >
       <div
@@ -44,6 +55,7 @@ const cerrarSesion = () => {
         borderStyle: "solid",
         textAlign: "center",
         position: "relative",
+        backgroundColor: "rgba(235, 238, 240, 0.8)"
       }}
       >
         <div

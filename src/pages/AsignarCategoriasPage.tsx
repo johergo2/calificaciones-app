@@ -1,3 +1,4 @@
+import axios from "axios";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
@@ -21,6 +22,11 @@ interface EventoCategoria {
   categoria_nombre: string;
 }
 
+type ParamEliminarCategoria = {
+  evento_id: number;
+  categoria_id: number;
+} | null;
+
 /* ===============================
    Constante API
 ================================ */
@@ -39,6 +45,8 @@ export default function AsignarCategoriasPage() {
   //const [mensajeOk, setMensajeOk] = useState("");
   const [mostrarPopup, setMostrarPopup] = useState(false);
   const [popupMensaje, setPopupMensaje] = useState("");
+  const [mostrarModalEliminar, setMostrarModalEliminar] = useState(false);
+  const [paramEliminarCat, setParamEliminarCat] = useState<ParamEliminarCategoria>(null);
 
   // Usuario que inicia sesión viene de LoginPage.tsx
   const usuarioId = Number(localStorage.getItem("usuarioId"));
@@ -125,11 +133,11 @@ export default function AsignarCategoriasPage() {
 
   /* ===============================
      Guardar asignación
-================================ */
+  ================================ */
   const guardarAsignacion = async () => {
     if (!eventoId) {
       //alert("Debe seleccionar un evento");
-      setPopupMensaje("Debe seleccionar participante y evento");
+      setPopupMensaje("Debe seleccionar evento");
       setMostrarPopup(true);      
       return;
     }
@@ -161,15 +169,38 @@ export default function AsignarCategoriasPage() {
      Eliminar categoría
 ================================ */
   const eliminarCategoria = async (eventoId: number, categoriaId: number) => {
-    if (!confirm("¿Eliminar esta categoría del evento?")) return;
+   // if (!confirm("¿Eliminar esta categoría del evento?")) return;
+    try {
+      console.log("intentando Delete: ", `${API_URL}/eventos/${eventoId}/categorias/${categoriaId}`)
+        const response = await fetch(
+            `${API_URL}/eventos/${eventoId}/categorias/${categoriaId}`,
+            { method: "DELETE" }
+        );
 
-    await fetch(
-      `${API_URL}/eventos/${eventoId}/categorias/${categoriaId}`,
-      { method: "DELETE" }
-    );
+        // ❗ VALIDAR STATUS HTTP
+        if (!response.ok) {
+          let detail = "Error al eliminar categoría";
+          try {
+            const data = await response.json();
+            detail = data?.detail || detail;           
+          } catch {
 
-    cargarCategoriasAsignadas(eventoId);
-    cargarTablaEventoCategorias(eventoFiltroId || undefined);
+          }      
+          setPopupMensaje(detail);
+          setMostrarPopup(true);    
+          return;       
+          
+        }
+        // ✅ Éxito
+        cargarCategoriasAsignadas(eventoId);
+        cargarTablaEventoCategorias(eventoFiltroId || undefined);
+        setPopupMensaje("Registro eliminado con éxito");
+        setMostrarPopup(true);
+    } catch(error) {  // Cuando hay errores de red, BD caida, URL incorrecta, Timeout
+        console.error("ERROR REAL:", error);
+        setPopupMensaje("Error de conexión con el servidor - BackEnd1");
+          setMostrarPopup(true);
+    }
   };
 
   /* ===============================
@@ -271,6 +302,24 @@ const botonCerrarStyle: React.CSSProperties = {
   cursor: "pointer",
 };
 
+const btnCancelarStyle: React.CSSProperties = {
+  background: "#2563EB",
+  color: "white",
+  padding: "6px 12px",
+  borderRadius: 6,
+  border: "none",
+  cursor: "pointer",
+};
+
+const btnGuardarStyle: React.CSSProperties = {
+  background: "#2563EB",
+  color: "white",
+  padding: "6px 14px",
+  borderRadius: 6,
+  border: "none",
+  cursor: "pointer",
+};
+
   /* ===============================
      Render
 ================================ */
@@ -291,6 +340,39 @@ const botonCerrarStyle: React.CSSProperties = {
           </div>
         </div>
       )}
+
+      {mostrarModalEliminar && (
+        <div style={overlayStyle}>
+          <div style={modalStyle}>
+            <h3>Categorías</h3>
+            <p>
+              ¿Hay participantes o jurados asociados?
+              <br />
+              ¿Confirma Eliminar Categoría?.
+            </p>
+            <div style={{ display: "flex", justifyContent: "flex-end", gap: "10px" }}>
+              <button
+                onClick={() => setMostrarModalEliminar(false)}
+                style={btnCancelarStyle}                
+              >
+                No
+              </button>
+
+              <button
+                onClick={() => {
+                  if (paramEliminarCat !== null) {
+                    eliminarCategoria(paramEliminarCat.evento_id, paramEliminarCat.categoria_id);                                  
+                  }
+                    setMostrarModalEliminar(false);
+                }}
+                style={btnGuardarStyle}                
+              >
+                Si
+              </button>
+            </div>
+          </div>
+        </div>
+      )}           
 
       <h2 style={{ textAlign: "center", color: "#1E40AF", fontWeight: 700, 
                    letterSpacing: "0.5PX" 
@@ -490,8 +572,11 @@ const botonCerrarStyle: React.CSSProperties = {
                                cursor: "pointer",                               
                                boxShadow: "0 2px 4px #4f555cff, 0 6px 10px rgba(0,0,0,0.2)"
                               }}
-                      onClick={() =>
-                        eliminarCategoria(row.evento_id, row.categoria_id)
+                      onClick={() => {
+                        setParamEliminarCat({ evento_id: row.evento_id, categoria_id: row.categoria_id });
+                        setMostrarModalEliminar(true);                          
+                        }
+
                       }
                     >
                       🗑️

@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-
+import FondoCal3 from "../imagenes/Fondo2.jpg"
 
 import type { CalificacionRanking } from "../services/calificacionesApi";
 import { getCalificacionesranking } from "../services/calificacionesApi";
@@ -118,8 +118,24 @@ export default function CalificacionesRanking() {
   ================================ */
 
   return (
-    <div style={{ width: "98vw", padding: "2px 5px", position: "relative",
-                  background: "#f1f5f9", minHeight: "90vh", overflowY: "auto", }}>
+    <div style={{ width: "98vw", 
+                  padding: "2px 5px", 
+                  position: "relative",
+                  background: "#f1f5f9", 
+                  minHeight: "90vh", 
+                  overflowY: "auto", 
+                //  backgroundImage: `
+                //    linear-gradient(
+                //      rgba(2,6,23,0.25),
+                //      rgba(2,6,23,0.25)
+                //    ),
+                //    url(${FondoCal3})
+                //  `,
+                //  backgroundSize: "cover",
+                //  backgroundPosition: "center",
+                //  backgroundRepeat: "no-repeat",                    
+                }}
+    >
 
 
       <h2 style={{ textAlign: "center", color: "#1E40AF", 
