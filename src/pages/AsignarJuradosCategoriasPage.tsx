@@ -1,3 +1,4 @@
+import axios from "axios";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
@@ -173,12 +174,32 @@ console.log("usuarioNombre:", usuarioNombre);
     eventoId: number,
     categoriaId: number
   ) => {
-    if (!confirm("¿Eliminar esta asignación?")) return;
-
-    await eliminarCategoriaJurado(cedula, eventoId, categoriaId);
-    cargarTabla(eventoFiltroId || undefined, usuarioId);
-    cargarCategoriasAsignadas();
-  };
+        try {
+        // if (!confirm("¿Eliminar esta asignación?")) return;
+          const data = await eliminarCategoriaJurado(cedula, eventoId, categoriaId);
+            // ✅ Éxito (HTTP 200)
+            setPopupMensaje(data.message || "Jurado eliminado correctamente");
+            setMostrarPopup(true);
+            cargarTabla(eventoFiltroId || undefined, usuarioId);
+            cargarCategoriasAsignadas();
+            } catch(error) {
+                // ❌ Error HTTP (409, 404, 500, etc.)
+                if (axios.isAxiosError(error)) {
+                  const status = error.response?.status;
+                  const detail = error.response?.data?.detail;
+                  if (status === 409 && detail) {
+                    setPopupMensaje(detail);
+                    setMostrarPopup(true);
+                    return;            
+                  }
+                  if (status === 404) {
+                    setPopupMensaje("La asignación no existe");
+                    setMostrarPopup(true);
+                    return;
+                  }          
+                }
+            }
+        };
 
 const overlayStyle: React.CSSProperties = {
   position: "fixed",
