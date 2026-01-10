@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import FondoCal3 from "../imagenes/Fondo2.jpg"
+//import FondoCal3 from "../imagenes/Fondo2.jpg"
 
 import type { CalificacionRanking } from "../services/calificacionesApi";
 import { getCalificacionesranking } from "../services/calificacionesApi";

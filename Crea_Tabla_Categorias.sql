@@ -374,10 +374,13 @@ select * from usuarios order by id
 
 select * from usuarios_eventos order by evento_id
 
-select * from participantes_categorias_eventos order by id
+select * from eventos_categorias where categoria_id = 17 order by id
+
+select * from participantes_categorias_eventos where evento_id = 23 order by id
 
 select * from jurados_categorias_eventos where evento_id = 23 order by id
 
-select * from eventos_categorias order by id
+select * from calificaciones where cedula_jurado = '33969414' and categoria_id = 17 and evento_id = 23
 
+select * FROM participantes_categ_eventos
 
