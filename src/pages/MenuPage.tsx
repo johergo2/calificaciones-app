@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router-dom";
-import FondoPpal from "../imagenes/Fondo2.jpg"
+import FondoPpal from "../Imagenes/Fondo2.jpg"
 
 export default function MenuPage() {
   const navigate = useNavigate();
