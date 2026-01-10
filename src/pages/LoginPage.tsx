@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { obtenerUsuarioPorNombre } from "../services/api";
 import { useNavigate } from "react-router-dom";
-import FondoPpal from "../imagenes/Fondo1.jpeg"
+import FondoPpal from "../Imagenes/Fondo1.jpeg"
 
 
 export default function LoginPage() {
@@ -35,7 +35,7 @@ export default function LoginPage() {
       //Guarda el ID y Nombre de usuario conectado
       localStorage.setItem("usuarioId", String(usuario.id));
       localStorage.setItem("usuarioNombre", usuario.nombre);
-      localStorage.setItem("usuarioRol", usuario.estado);
+      //localStorage.setItem("usuarioRol", usuario.estado);
       localStorage.setItem("usuarioRol", usuario.rol);
 
       setMensaje(`Bienvenido ${usuario.nombre}`);
